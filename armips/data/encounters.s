@@ -18,6 +18,10 @@ goodrodrate 50
 superrodrate 75
 walklevels 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
+// 20 20 10 10 10 10 5 5 4 4 1 1 
+// 60 30 5 4 1 
+// 40 40 15 4 1 
+
 // morning encounter slots
 pokemon SPECIES_NONE
 pokemon SPECIES_NONE
@@ -123,8 +127,8 @@ superrodrate 0
 walklevels 2, 3, 2, 3, 3, 3, 2, 2, 4, 4, 4, 4
 
 // morning encounter slots
-pokemon SPECIES_PIDGEY
-pokemon SPECIES_SENTRET
+pokemon SPECIES_PIKACHU
+pokemon SPECIES_PIKACHU
 pokemon SPECIES_PIDGEY
 pokemon SPECIES_SENTRET
 pokemon SPECIES_PIDGEY
