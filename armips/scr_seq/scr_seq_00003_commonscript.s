@@ -91,6 +91,7 @@ scrdef scr_seq_0003_073_autobattle_testing
 scrdef_end
 
 scr_seq_0003_002:
+    giveitem_no_check ITEM_INFINITE_RARE_CANDY, 1
     play_se SEQ_SE_DP_SELECT
     lockall
     faceplayer
