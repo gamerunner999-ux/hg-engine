@@ -1,9 +1,14 @@
-#include "nitro.h"
-#include "battle.h"
-#include "poke_party.h"
-#include "pokemon.h"
-#include "battle_system.h"
-#include "global.h"
+#include "../../include/types.h"
+#include "../../include/battle.h"
+#include "../../include/config.h"
+#include "../../include/pokemon.h"
+#include "../../include/sprite.h"
+#include "../../include/mega.h"
+#include "../../include/constants/ability.h"
+#include "../../include/constants/battle_script_constants.h"
+#include "../../include/constants/item.h"
+#include "../../include/constants/file.h"
+#include "../../include/constants/weather_numbers.h"
 
 // ============================================================================
 // Terastallization UI Constants
