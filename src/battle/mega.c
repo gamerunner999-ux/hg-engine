@@ -480,7 +480,7 @@ BOOL CheckCanDrawTeraButton(struct BI_PARAM *bip)
     u16 moves[4];
 
 #ifndef DEBUG_ENABLE_ALL_GIMMICKS
-    if (!CheckScriptFlag(FLAG_TERASTALLIZATION_ENABLED)) {
+    if (!CheckScriptFlag(FLAG_TERASTALIZATION_ENABLED)) {
         return FALSE;
     }
 #endif
