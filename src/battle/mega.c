@@ -273,7 +273,7 @@ const struct MegaStructMove sMegaMoveTable[] =
 };
 #endif // MEGA_EVOLUTIONS
 
-static BOOL CheckMegaMoveData(u32 mon, u16 *moves);
+BOOL CheckMegaMoveData(u32 mon, u16 *moves);
 
 BOOL CheckCanMega(struct BattleStruct *battle, int client)
 {
@@ -470,62 +470,6 @@ BOOL CheckCanDrawMegaButton(struct BI_PARAM *bip)
         return FALSE;
 
     return (CheckMegaData(mon, item) || CheckMegaMoveData(mon, moves));
-}
-
-BOOL CheckCanDrawTeraButton(struct BI_PARAM *bip)
-{
-    void *pp;
-    u16 item;
-    u16 mon;
-    u16 moves[4];
-
-#ifndef DEBUG_ENABLE_ALL_GIMMICKS
-    if (!CheckScriptFlag(FLAG_TERASTALIZATION_ENABLED)) {
-        return FALSE;
-    }
-#endif
-
-    // If this is a double battle and the player already queued Tera on the first mon
-    if (bip->client_no && newBS.playerWantTera) 
-    {
-        return FALSE;
-    }
-
-    // If the player has already used Terastallization during this match
-    if (newBS.PlayerTeraed)
-    {
-        return FALSE;
-    }
-
-    // Hardware/Emulator safety check
-    if (IS_NOT_VALID_EWRAM_POINTER(&bip->bw->opponentData[bip->client_no])) 
-    {
-        return FALSE;
-    }
-
-    pp = BattleWorkPokemonParamGet(bip->bw, bip->client_no, bip->sel_mons_no);
-    mon = GetMonData(pp, MON_DATA_SPECIES, NULL);
-    item = GetMonData(pp, MON_DATA_HELD_ITEM, NULL);
-    
-    for (int i = 0; i < 4; i++) {
-        moves[i] = GetMonData(pp, MON_DATA_MOVE1+i, NULL);
-    }
-
-    // --- GIMMICK CONFLICT CHECK ---
-    // If the Pokémon is currently eligible to Mega Evolve, it cannot Terastallize
-    if (CheckMegaData(mon, item) || CheckMegaMoveData(mon, moves))
-    {
-        return FALSE;
-    }
-
-    // Prevent Terastallization if transformed or if somehow already Terastallized
-    if ((bip->bw->sp->battlemon[bip->client_no].condition2 & STATUS2_TRANSFORMED) 
-     || bip->bw->sp->battlemon[bip->client_no].is_currently_terastallized)
-    {
-        return FALSE;
-    }
-
-    return TRUE;
 }
 
 BOOL CheckCanSpeciesMegaEvolveByMove(struct BattleStruct *sp, u32 client)
