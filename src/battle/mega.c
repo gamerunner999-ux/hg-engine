@@ -416,7 +416,7 @@ u32 LONG_CALL GrabMegaTargetForm(u32 mon, u32 item)
     return 0;
 }
 
-static BOOL CheckMegaMoveData(u32 mon, u16 *moves)
+BOOL CheckMegaMoveData(u32 mon, u16 *moves)
 {
 #ifdef MEGA_EVOLUTIONS
     int i, j;
