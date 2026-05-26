@@ -1816,11 +1816,13 @@ struct PACKED newBattleStruct
     u8 ChangeBgFlag:4;
     u8 CanMega:4;
 
-    // --- Terastallization Mechanics ---
-    u8 playerWantTera;   // Tracks if the player has queued Tera for this action turn
-    u8 PlayerTeraed;     // Tracks if the player's side has used their Tera Orb completely
-    u8 TeraIconLight;    // Tracks if the Tera button is currently glowing/selected
-    u8 CanTera;          // Tracks if the active mon is eligible to draw the Tera button
+// --- Terastallization Tracking ---
+    u8 SideTera[4];          // <--- ADD THIS: Tracks if a specific client has Terastallized
+    u8 needTera[4];          // <--- ADD THIS: Action queue tracking for Terastallization this turn
+    u8 playerWantTera;       // Tracks if player has toggled the UI button this turn
+    u8 PlayerTeraed;         // Backwards compatibility flag for player side
+    u8 TeraIconLight;        // UI toggle state indicator
+    u8 CanTera;              // Eligibility indicator flag
 
     CATS_ACT_PTR MegaOAM;
     CATS_ACT_PTR MegaButton;
