@@ -1018,12 +1018,12 @@ BOOL CheckCanDrawTeraButton(struct BI_PARAM *bip)
     u16 mon;
     u16 moves[4];
 
-#ifndef DEBUG_ENABLE_ALL_GIMMICKS
+//#ifndef DEBUG_ENABLE_ALL_GIMMICKS
     // Ensure the story flag for the Tera Orb is active
-    if (!CheckScriptFlag(FLAG_TERASTALIZATION_ENABLED)) {
-        return FALSE;
-    }
-#endif
+   // if (!CheckScriptFlag(FLAG_TERASTALIZATION_ENABLED)) {
+ //       return FALSE;
+   // }
+//#endif
 
     // Double battle safety: if player already selected Tera for the first slot
     if (bip->client_no && newBS.playerWantTera) 
