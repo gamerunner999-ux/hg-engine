@@ -5,11 +5,15 @@
 #include "battle_system.h"
 #include "global.h"
 
-// Ensure these constants match your definitions in your header/constants files!
-#define TERA_ICON_SELECTED_GFX  (144) 
-#define TERA_ICON_BLANK_GFX     (146) 
-#define TERA_BUTTON_SPRITE_TAG  (20005)
-#define TERA_BUTTON_PAL_TAG     (20006)
+// Ensure these match your global header tags perfectly!
+#define TERA_BUTTON_SPRITE_TAG   (22064)
+#define TERA_BUTTON_PAL_TAG      (22065)
+#define TERA_ICON_SPRITE_TAG     (22060)
+
+// (Keep your graphic file asset indices the same)
+#define TERA_ICON_FIGHT_GFX      (143) 
+#define TERA_ICON_SELECTED_GFX   (144) 
+#define TERA_ICON_BLANK_GFX      (146)
 
 /**
  * @brief Checks if the active Pokémon is eligible to Terastallize this turn.

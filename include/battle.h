@@ -1816,8 +1816,16 @@ struct PACKED newBattleStruct
     u8 ChangeBgFlag:4;
     u8 CanMega:4;
 
+    // --- Terastallization Mechanics ---
+    u8 playerWantTera;   // Tracks if the player has queued Tera for this action turn
+    u8 PlayerTeraed;     // Tracks if the player's side has used their Tera Orb completely
+    u8 TeraIconLight;    // Tracks if the Tera button is currently glowing/selected
+    u8 CanTera;          // Tracks if the active mon is eligible to draw the Tera button
+
     CATS_ACT_PTR MegaOAM;
     CATS_ACT_PTR MegaButton;
+    CATS_ACT_PTR TeraOAM;       // Graphics handle for the combat menu icon
+    CATS_ACT_PTR TeraButton;    // Touch target handle for the interactive button
     CATS_ACT_PTR WeatherOAM;
     SysTask *weatherUpdateTask;
 
