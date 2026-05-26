@@ -24,6 +24,9 @@ u32 GrabCancelXValue(void);
 void SwapOutBottomScreen(struct BI_PARAM *bip);
 
 void LONG_CALL BGCallback_Waza(struct BI_PARAM *bip, int select_bg, int force_put);
+// Forward declarations to make the compiler happy
+BOOL CheckMegaMoveData(u16 species, u16 *moves);
+BOOL CheckCanDrawTeraButton(struct BI_PARAM *bip);
 
 
 
@@ -514,70 +517,6 @@ BOOL CheckMegaButton(struct BI_PARAM *bip, int tp_ret)
     return 1;
 }
 
-BOOL CheckTeraButton(struct BI_PARAM *bip, int tp_ret)
-{
-    void *csp;
-    void *crp;
-    void *pfd;
-    int iconindex = TERA_ICON_SELECTED_GFX;
-    int palindex = TERA_ICON_SELECTED_GFX + 1; // Palette is typically the file right after the graphic
-
-    // 1. Initial Guard Filters
-    if (tp_ret != 5) // Ensure the touch input matches the gimmick button slot
-        return 0;
-    if (newBS.ChangeBgFlag) // Don't allow input if a UI animation background shift is rendering
-        return 0;
-    if (!newBS.CanTera) // Don't process if the current Pokemon isn't allowed to Terastallize
-        return 0;
-    if (newBS.PlayerTeraed) // Don't process if the Tera Orb has already been consumed this battle
-        return 0;
-
-    // 2. Grab System and VRAM Pointers
-    csp = BattleWorkCATS_SYS_PTRGet(bip->bw);
-    crp = BattleWorkCATS_RES_PTRGet(bip->bw);
-    pfd = BattleWorkPfdGet(bip->bw);
-
-    // 3. Clear existing button graphics out of VRAM before loading the new state
-    OAM_FreeResourcePltt(crp, TERA_BUTTON_PAL_TAG);
-    OAM_FreeResourceChar(crp, TERA_BUTTON_SPRITE_TAG);
-
-    // 4. Toggle the Active State Logic
-    if (newBS.TeraIconLight)
-    {
-        // If it was already active, turn it off (switch back to unselected/blank)
-        iconindex = TERA_ICON_BLANK_GFX;
-        palindex = TERA_ICON_BLANK_GFX + 1;
-        newBS.TeraIconLight = 0;
-    }
-    else
-    {
-        // If it was inactive, turn it on (glowing state)
-        newBS.TeraIconLight = 1;
-    }
-
-    // 5. Stream the new UI assets from ARC_BATTLE_GFX into Sub-VRAM
-    OAM_LoadResourceCharArc(csp, crp, ARC_BATTLE_GFX, iconindex, 0, NNS_G2D_VRAM_TYPE_2DSUB, TERA_BUTTON_SPRITE_TAG);
-    OAM_LoadResourcePlttWorkArc(pfd, FADE_SUB_OBJ, csp, crp, ARC_BATTLE_GFX, palindex, 0, 1, NNS_G2D_VRAM_TYPE_2DSUB, TERA_BUTTON_PAL_TAG);
-    
-    // Refresh the hardware OAM sprite tracking
-    OAM_ObjectUpdate(newBS.TeraButton->act);
-
-    // 6. Audio/Visual Feedback
-    Snd_SePlay(1501); // Standard menu click SE. (Feel free to update to a custom Tera SE ID later!)
-    
-    // Note: We skip the Mega screen-darkening effect task (EffectTCB_Add) 
-    // to prevent the screen tinting black like a Mega Evolution.
-
-    // 7. Update UI Layout Buffers to keep focus on the move screen
-    bip->scrn_offset = MoveSelectScreenOffsets[0];
-    bip->scrn_range = &MoveSelectButtonScreenRectangle[0];
-    bip->scrnbuf_no = 3;
-    bip->tp_ret = RECT_HIT_NONE;
-    bip->obj_del = FALSE;
-    newBS.ChangeBgFlag = 1;
-
-    return 1;
-}
 
 /**
  *  @brief callback task for pressing the mega button
