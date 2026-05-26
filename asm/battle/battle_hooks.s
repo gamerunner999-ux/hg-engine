@@ -64,23 +64,32 @@ str r0, [sp, #0x4]
 ldr r0, =0x2FC04 + 0x022378C0|1
 bx r0
 
-//08030644
 .global MegaButtonCheck
 MegaButtonCheck:
-mov r2, r5
-add r2, r2, #0x1C
-push {r0-r3}
-mov r0, r5
-mov r1, r4
-bl CheckMegaButton
-cmp r0, #0x0
-bne end
-pop {r0-r3}
-cmp r4, #0x1
-blt sub_803065Ah
-ldr r3, =0x3064C + 0x022378C0|1
-bx r3
+    mov r2, r5
+    add r2, r2, #0x1C
+    push {r0-r3}
 
+    @ 1. Check for Mega Evolution Button Press
+    mov r0, r5          @ r5 = bip pointer
+    mov r1, r4          @ r4 = tp_ret (touch input value)
+    bl CheckMegaButton
+    cmp r0, #0x0
+    bne end             @ If it returns 1 (handled), exit cleanly to 'end'
+
+    @ 2. Check for Terastallization Button Press
+    mov r0, r5          @ Reload bip pointer (r5 is preserved by C functions)
+    mov r1, r4          @ Reload touch input value (r4 is preserved by C functions)
+    bl CheckTeraButton
+    cmp r0, #0x0
+    bne end             @ If it returns 1 (handled), exit cleanly to 'end'
+
+    @ 3. Fallback: Neither button was pressed, run original game logic
+    pop {r0-r3}
+    cmp r4, #0x1
+    blt sub_803065Ah
+    ldr r3, =0x3064C + 0x022378C0|1
+    bx r3
 sub_803065Ah:
 ldr r0, =0x3065A + 0x022378C0|1
 bx r0

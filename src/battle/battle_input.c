@@ -310,9 +310,13 @@ void LoadMegaIcon(struct BI_PARAM *bip)
     void *csp;
     void *crp;
 
-    OAMSpriteTemplate template = MegaIconObjParam; // memcpy should handle this
+    OAMSpriteTemplate template = MegaIconObjParam; // Copy baseline icon settings
 
+    // 1. Calculate eligibility for both mechanics
     newBS.CanMega = CheckCanDrawMegaButton(bip);
+    newBS.CanTera = CheckCanDrawTeraButton(bip);
+
+    // 2. Render Mega Evolution / Primal Icons if eligible
     if (!newBS.MegaOAM && CheckIsMega(bip))
     {
         csp = BattleWorkCATS_SYS_PTRGet(bip->bw);
@@ -346,7 +350,23 @@ void LoadMegaIcon(struct BI_PARAM *bip)
         newBS.MegaOAM = OAM_ObjectAdd_S(csp, crp, &template);
         OAM_ObjectUpdate(newBS.MegaOAM->act);
     }
+    // 3. Render Terastallization Icon if eligible
+    else if (!newBS.TeraOAM && newBS.CanTera)
+    {
+        csp = BattleWorkCATS_SYS_PTRGet(bip->bw);
+        crp = BattleWorkCATS_RES_PTRGet(bip->bw);
 
+        // Load the Tera crystal indicator sprite asset
+        OAM_LoadResourceCharArc(csp, crp, ARC_BATTLE_GFX, TERA_ICON_FIGHT_GFX, 0, NNS_G2D_VRAM_TYPE_2DSUB, TERA_ICON_SPRITE_TAG);
+        
+        if (bip->client_no != 0)
+            template.x = 103; // Mirror placement adjustment for doubles
+            
+        newBS.TeraOAM = OAM_ObjectAdd_S(csp, crp, &template);
+        OAM_ObjectUpdate(newBS.TeraOAM->act);
+    }
+
+    // Weather icon handling remains exactly the same below...
     if (bip->bw->sp->field_condition & WEATHER_ANY_ICONS)
     {
         u32 ncgr;
@@ -354,31 +374,21 @@ void LoadMegaIcon(struct BI_PARAM *bip)
         crp = BattleWorkCATS_RES_PTRGet(bip->bw);
 
         if (bip->bw->sp->field_condition & WEATHER_SUNNY_ANY)
-        {
             ncgr = BATTLE_GFX_SUN_NCGR;
-        }
         else if (bip->bw->sp->field_condition & WEATHER_RAIN_ANY)
-        {
             ncgr = BATTLE_GFX_RAIN_NCGR;
-        }
         else if (bip->bw->sp->field_condition & WEATHER_SANDSTORM_ANY)
-        {
             ncgr = BATTLE_GFX_SANDSTORM_NCGR;
-        }
         else if (bip->bw->sp->field_condition & WEATHER_HAIL_ANY)
-        {
             ncgr = BATTLE_GFX_HAIL_NCGR;
-        }
-        else // fog
-        {
+        else
             ncgr = BATTLE_GFX_FOG_NCGR;
-        }
 
         OAM_LoadResourceCharArc(csp, crp, ARC_BATTLE_GFX, ncgr, 0, NNS_G2D_VRAM_TYPE_2DSUB, WEATHER_ICON_SPRITE_TAG);
         newBS.WeatherOAM = OAM_ObjectAdd_S(csp, crp, &WeatherIconObjParam);
-        OAM_ObjectAnimeSeqSetCap(newBS.WeatherOAM, 4); // set it to pokemon anim id 4, should be slowest
+        OAM_ObjectAnimeSeqSetCap(newBS.WeatherOAM, 4);
         OAM_ObjectUpdate(newBS.WeatherOAM->act);
-        newBS.weatherUpdateTask = CreateSysTask((SysTaskFunc)0x022684ED, newBS.WeatherOAM, 1300); // 0x022684ED is the pokemon icon animation function
+        newBS.weatherUpdateTask = CreateSysTask((SysTaskFunc)0x022684ED, newBS.WeatherOAM, 1300);
     }
 }
 
@@ -486,6 +496,71 @@ BOOL CheckMegaButton(struct BI_PARAM *bip, int tp_ret)
     bip->tp_ret = RECT_HIT_NONE;
     bip->obj_del = FALSE;
     newBS.ChangeBgFlag = 1;
+    return 1;
+}
+
+BOOL CheckTeraButton(struct BI_PARAM *bip, int tp_ret)
+{
+    void *csp;
+    void *crp;
+    void *pfd;
+    int iconindex = TERA_ICON_SELECTED_GFX;
+    int palindex = TERA_ICON_SELECTED_GFX + 1; // Palette is typically the file right after the graphic
+
+    // 1. Initial Guard Filters
+    if (tp_ret != 5) // Ensure the touch input matches the gimmick button slot
+        return 0;
+    if (newBS.ChangeBgFlag) // Don't allow input if a UI animation background shift is rendering
+        return 0;
+    if (!newBS.CanTera) // Don't process if the current Pokemon isn't allowed to Terastallize
+        return 0;
+    if (newBS.PlayerTeraed) // Don't process if the Tera Orb has already been consumed this battle
+        return 0;
+
+    // 2. Grab System and VRAM Pointers
+    csp = BattleWorkCATS_SYS_PTRGet(bip->bw);
+    crp = BattleWorkCATS_RES_PTRGet(bip->bw);
+    pfd = BattleWorkPfdGet(bip->bw);
+
+    // 3. Clear existing button graphics out of VRAM before loading the new state
+    OAM_FreeResourcePltt(crp, TERA_BUTTON_PAL_TAG);
+    OAM_FreeResourceChar(crp, TERA_BUTTON_SPRITE_TAG);
+
+    // 4. Toggle the Active State Logic
+    if (newBS.TeraIconLight)
+    {
+        // If it was already active, turn it off (switch back to unselected/blank)
+        iconindex = TERA_ICON_BLANK_GFX;
+        palindex = TERA_ICON_BLANK_GFX + 1;
+        newBS.TeraIconLight = 0;
+    }
+    else
+    {
+        // If it was inactive, turn it on (glowing state)
+        newBS.TeraIconLight = 1;
+    }
+
+    // 5. Stream the new UI assets from ARC_BATTLE_GFX into Sub-VRAM
+    OAM_LoadResourceCharArc(csp, crp, ARC_BATTLE_GFX, iconindex, 0, NNS_G2D_VRAM_TYPE_2DSUB, TERA_BUTTON_SPRITE_TAG);
+    OAM_LoadResourcePlttWorkArc(pfd, FADE_SUB_OBJ, csp, crp, ARC_BATTLE_GFX, palindex, 0, 1, NNS_G2D_VRAM_TYPE_2DSUB, TERA_BUTTON_PAL_TAG);
+    
+    // Refresh the hardware OAM sprite tracking
+    OAM_ObjectUpdate(newBS.TeraButton->act);
+
+    // 6. Audio/Visual Feedback
+    Snd_SePlay(1501); // Standard menu click SE. (Feel free to update to a custom Tera SE ID later!)
+    
+    // Note: We skip the Mega screen-darkening effect task (EffectTCB_Add) 
+    // to prevent the screen tinting black like a Mega Evolution.
+
+    // 7. Update UI Layout Buffers to keep focus on the move screen
+    bip->scrn_offset = MoveSelectScreenOffsets[0];
+    bip->scrn_range = &MoveSelectButtonScreenRectangle[0];
+    bip->scrnbuf_no = 3;
+    bip->tp_ret = RECT_HIT_NONE;
+    bip->obj_del = FALSE;
+    newBS.ChangeBgFlag = 1;
+
     return 1;
 }
 

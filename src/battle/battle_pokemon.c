@@ -901,6 +901,17 @@ void BattleEndRevertFormChange(struct BattleSystem *bw)
     newBS.ChangeBgFlag = 0;
     newBS.MegaIconLight = 0;
 
+    newBS.SideTera[0] = 0;
+    newBS.SideTera[1] = 0;
+    newBS.SideTera[2] = 0;
+    newBS.SideTera[3] = 0;
+    newBS.playerWantTera = 0;
+    newBS.PlayerTeraed = 0;
+    newBS.CanTera = 0;
+    newBS.TeraIconLight = 0;
+
+    newBS.ChangeBgFlag = 0;
+
     for (i = 0; i < 2; i++)
     {
         // revert illusion
