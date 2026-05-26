@@ -5,15 +5,19 @@
 #include "battle_system.h"
 #include "global.h"
 
-// Ensure these match your global header tags perfectly!
-#define TERA_BUTTON_SPRITE_TAG   (22064)
-#define TERA_BUTTON_PAL_TAG      (22065)
-#define TERA_ICON_SPRITE_TAG     (22060)
-
-// (Keep your graphic file asset indices the same)
+// ============================================================================
+// Terastallization UI Constants
+// ============================================================================
 #define TERA_ICON_FIGHT_GFX      (143) 
 #define TERA_ICON_SELECTED_GFX   (144) 
-#define TERA_ICON_BLANK_GFX      (146)
+#define TERA_ICON_BLANK_GFX      (146) 
+
+#define TERA_ICON_SPRITE_TAG     (22060)
+#define TERA_ICON_PAL_TAG        (22061)
+#define TERA_ICON_CELL_TAG       (22062)
+#define TERA_ICON_CELL_ANIM_TAG  (22063)
+#define TERA_BUTTON_SPRITE_TAG   (22064)
+#define TERA_BUTTON_PAL_TAG      (22065)
 
 /**
  * @brief Checks if the active Pokémon is eligible to Terastallize this turn.

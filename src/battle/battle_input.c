@@ -41,13 +41,19 @@ struct newBattleStruct __attribute__((section (".data"))) newBS = {0};
 #define WEATHER_ICON_PAL_TAG 22057
 #define WEATHER_ICON_CELL_TAG 22058
 #define WEATHER_ICON_CELL_ANIM_TAG 22059
-// terastallization icon sprite tags to keep track of things
-#define TERA_ICON_SPRITE_TAG        22060
-#define TERA_ICON_PAL_TAG           22061
-#define TERA_ICON_CELL_TAG          22062
-#define TERA_ICON_CELL_ANIM_TAG     22063
-#define TERA_BUTTON_SPRITE_TAG      22064
-#define TERA_BUTTON_PAL_TAG         22065
+// ============================================================================
+// Terastallization UI Constants
+// ============================================================================
+#define TERA_ICON_FIGHT_GFX      (143) 
+#define TERA_ICON_SELECTED_GFX   (144) 
+#define TERA_ICON_BLANK_GFX      (146) 
+
+#define TERA_ICON_SPRITE_TAG     (22060)
+#define TERA_ICON_PAL_TAG        (22061)
+#define TERA_ICON_CELL_TAG       (22062)
+#define TERA_ICON_CELL_ANIM_TAG  (22063)
+#define TERA_BUTTON_SPRITE_TAG   (22064)
+#define TERA_BUTTON_PAL_TAG      (22065)
 
 // values to return when rectangle is touched
 #define TOUCH_DATA_CANCEL 0
