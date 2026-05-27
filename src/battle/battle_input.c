@@ -368,17 +368,26 @@ void LoadMegaIcon(struct BI_PARAM *bip)
         newBS.MegaOAM = OAM_ObjectAdd_S(csp, crp, &template);
         OAM_ObjectUpdate(newBS.MegaOAM->act);
     }
-    // 3. Render Terastallization Icon if eligible
+// 3. Render Terastallization Icon if eligible
     else if (!newBS.TeraOAM && newBS.CanTera)
     {
         csp = BattleWorkCATS_SYS_PTRGet(bip->bw);
         crp = BattleWorkCATS_RES_PTRGet(bip->bw);
 
-        // Load the Tera crystal indicator sprite asset
+        // Load both the pixels AND the color properties into Sub-VRAM
         OAM_LoadResourceCharArc(csp, crp, ARC_BATTLE_GFX, TERA_ICON_FIGHT_GFX, 0, NNS_G2D_VRAM_TYPE_2DSUB, TERA_ICON_SPRITE_TAG);
         
+        void *pfd = BattleWorkPfdGet(bip->bw);
+        OAM_LoadResourcePlttWorkArc(pfd, FADE_SUB_OBJ, csp, crp, ARC_BATTLE_GFX, TERA_ICON_FIGHT_GFX + 1, 0, 1, NNS_G2D_VRAM_TYPE_2DSUB, TERA_ICON_PAL_TAG);
+
+        // Overwrite the copied template fields so it uses the Tera tracking slots
+        template.sprite_tag = TERA_ICON_SPRITE_TAG;
+        template.pal_tag    = TERA_ICON_PAL_TAG;
+        template.cell_tag   = TERA_ICON_CELL_TAG;
+        template.anim_tag   = TERA_ICON_CELL_ANIM_TAG;
+
         if (bip->client_no != 0)
-            template.x = 103; // Mirror placement adjustment for doubles
+            template.x = 103; // Mirror placement adjustment for double battles
             
         newBS.TeraOAM = OAM_ObjectAdd_S(csp, crp, &template);
         OAM_ObjectUpdate(newBS.TeraOAM->act);
