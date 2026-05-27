@@ -373,23 +373,39 @@ void LoadMegaIcon(struct BI_PARAM *bip)
     {
         csp = BattleWorkCATS_SYS_PTRGet(bip->bw);
         crp = BattleWorkCATS_RES_PTRGet(bip->bw);
-
-        // Load both the pixels AND the color properties into Sub-VRAM
-        OAM_LoadResourceCharArc(csp, crp, ARC_BATTLE_GFX, TERA_ICON_FIGHT_GFX, 0, NNS_G2D_VRAM_TYPE_2DSUB, TERA_ICON_SPRITE_TAG);
-        
         void *pfd = BattleWorkPfdGet(bip->bw);
+
+        // 1. Load both pixel configurations AND color properties into Sub-VRAM
+        OAM_LoadResourceCharArc(csp, crp, ARC_BATTLE_GFX, TERA_ICON_FIGHT_GFX, 0, NNS_G2D_VRAM_TYPE_2DSUB, TERA_ICON_SPRITE_TAG);
         OAM_LoadResourcePlttWorkArc(pfd, FADE_SUB_OBJ, csp, crp, ARC_BATTLE_GFX, TERA_ICON_FIGHT_GFX + 1, 0, 1, NNS_G2D_VRAM_TYPE_2DSUB, TERA_ICON_PAL_TAG);
 
-        // Overwrite the copied template fields so it uses the Tera tracking slots
-        template.sprite_tag = TERA_ICON_SPRITE_TAG;
-        template.pal_tag    = TERA_ICON_PAL_TAG;
-        template.cell_tag   = TERA_ICON_CELL_TAG;
-        template.anim_tag   = TERA_ICON_CELL_ANIM_TAG;
+        // 2. Build the template explicitly from scratch using your exact structural blueprint
+        OAMSpriteTemplate teraTemplate = {
+            155, // x coordinate
+            161, // y coordinate
+            0,   // z coordinate
+            0,
+            100,
+            0,
+            NNS_G2D_VRAM_TYPE_2DSUB,
+            {
+                TERA_ICON_SPRITE_TAG,
+                TERA_ICON_PAL_TAG,
+                TERA_ICON_CELL_TAG,
+                TERA_ICON_CELL_ANIM_TAG,
+                CLACT_U_HEADER_DATA_NONE,
+                CLACT_U_HEADER_DATA_NONE,
+            },
+            1,
+            0,
+        };
 
+        // 3. Apply the double battle offset adjustments if necessary
         if (bip->client_no != 0)
-            template.x = 103; // Mirror placement adjustment for double battles
+            teraTemplate.x = 103; 
             
-        newBS.TeraOAM = OAM_ObjectAdd_S(csp, crp, &template);
+        // 4. Register and draw the object
+        newBS.TeraOAM = OAM_ObjectAdd_S(csp, crp, &teraTemplate);
         OAM_ObjectUpdate(newBS.TeraOAM->act);
     }
 
