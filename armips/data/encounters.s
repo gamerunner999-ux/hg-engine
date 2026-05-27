@@ -124,7 +124,7 @@ rocksmashrate 0
 oldrodrate 0
 goodrodrate 0
 superrodrate 0
-walklevels 2, 3, 2, 3, 3, 3, 2, 2, 4, 4, 4, 4
+walklevels 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
 
 // morning encounter slots
 pokemon SPECIES_SQUAWKABILLY
@@ -332,7 +332,7 @@ rocksmashrate 0
 oldrodrate 25
 goodrodrate 50
 superrodrate 75
-walklevels 2, 3, 2, 3, 4, 4, 4, 4, 4, 4, 4, 4
+walklevels 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
 
 // morning encounter slots
 pokemon SPECIES_MAGBY
@@ -436,7 +436,7 @@ rocksmashrate 0
 oldrodrate 25
 goodrodrate 50
 superrodrate 75
-walklevels 3, 4, 3, 4, 3, 3, 5, 5, 5, 5, 5, 5
+walklevels 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 
 // morning encounter slots
 pokemon SPECIES_FLITTLE
@@ -644,7 +644,7 @@ rocksmashrate 0
 oldrodrate 0
 goodrodrate 0
 superrodrate 0
-walklevels 3, 4, 3, 4, 5, 5, 3, 3, 6, 5, 6, 5
+walklevels 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 
 // morning encounter slots
 pokemon SPECIES_PETILIL
@@ -748,7 +748,7 @@ rocksmashrate 0
 oldrodrate 0
 goodrodrate 0
 superrodrate 0
-walklevels 3, 4, 3, 4, 5, 5, 3, 3, 6, 5, 6, 5
+walklevels 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 
 // morning encounter slots
 pokemon SPECIES_PETILIL
@@ -852,7 +852,7 @@ rocksmashrate 0
 oldrodrate 25
 goodrodrate 50
 superrodrate 75
-walklevels 6, 4, 6, 4, 6, 6, 6, 6, 6, 4, 6, 4
+walklevels 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 
 // morning encounter slots
 pokemon SPECIES_BLITZLE
@@ -7101,7 +7101,7 @@ pokemon SPECIES_BURMY
 pokemon SPECIES_COMBEE
 pokemon SPECIES_VENIPEDE
 pokemon SPECIES_TANGELA
-pokemon SPECIES_STUNKY
+monwithform SPECIES_DIGLETT, 1
 pokemon SPECIES_LEDYBA
 pokemon SPECIES_SKORUPI
 pokemon SPECIES_ORTHWORM
@@ -7115,7 +7115,7 @@ pokemon SPECIES_BURMY
 pokemon SPECIES_COMBEE
 pokemon SPECIES_VENIPEDE
 pokemon SPECIES_TANGELA
-pokemon SPECIES_STUNKY
+monwithform SPECIES_DIGLETT, 1
 pokemon SPECIES_LEDYBA
 pokemon SPECIES_SKORUPI
 pokemon SPECIES_ORTHWORM
@@ -7129,7 +7129,7 @@ pokemon SPECIES_BURMY
 pokemon SPECIES_COMBEE
 pokemon SPECIES_VENIPEDE
 pokemon SPECIES_TANGELA
-pokemon SPECIES_STUNKY
+monwithform SPECIES_DIGLETT, 1
 pokemon SPECIES_LEDYBA
 pokemon SPECIES_SKORUPI
 pokemon SPECIES_ORTHWORM
@@ -7196,18 +7196,18 @@ rocksmashrate 50
 oldrodrate 25
 goodrodrate 50
 superrodrate 75
-walklevels 3, 2, 3, 2, 2, 2, 4, 4, 3, 4, 3, 4
+walklevels 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
 
 // morning encounter slots
 pokemon SPECIES_BONSLY
 pokemon SPECIES_ROGGENROLA
 pokemon SPECIES_GEODUDE
 pokemon SPECIES_LARVITAR
-pokemon SPECIES_SILICOBRA
+pokemon SPECIES_AMAURA   
 pokemon SPECIES_ROLYCOLY
 monwithform SPECIES_DIGLETT, 1
 pokemon SPECIES_CUFANT
-pokemon SPECIES_NUMEL
+pokemon SPECIES_BINACLE
 pokemon SPECIES_ARON
 pokemon SPECIES_ARCHEN
 pokemon SPECIES_SHIELDON
@@ -7217,11 +7217,11 @@ pokemon SPECIES_BONSLY
 pokemon SPECIES_ROGGENROLA
 pokemon SPECIES_GEODUDE
 pokemon SPECIES_LARVITAR
-pokemon SPECIES_SILICOBRA
+pokemon SPECIES_AMAURA   
 pokemon SPECIES_ROLYCOLY
 monwithform SPECIES_DIGLETT, 1
 pokemon SPECIES_CUFANT
-pokemon SPECIES_NUMEL
+pokemon SPECIES_BINACLE
 pokemon SPECIES_ARON
 pokemon SPECIES_ARCHEN
 pokemon SPECIES_SHIELDON
@@ -7231,22 +7231,22 @@ pokemon SPECIES_BONSLY
 pokemon SPECIES_ROGGENROLA
 pokemon SPECIES_GEODUDE
 pokemon SPECIES_LARVITAR
-pokemon SPECIES_SILICOBRA
+pokemon SPECIES_AMAURA   
 pokemon SPECIES_ROLYCOLY
 monwithform SPECIES_DIGLETT, 1
 pokemon SPECIES_CUFANT
-pokemon SPECIES_NUMEL
+pokemon SPECIES_BINACLE
 pokemon SPECIES_ARON
 pokemon SPECIES_ARCHEN
 pokemon SPECIES_SHIELDON
 
 // hoenn encounter slots
-pokemon SPECIES_ABSOL
-pokemon SPECIES_MAKUHITA
+pokemon SPECIES_NONE
+pokemon SPECIES_NONE
 
 // sinnoh encounter slots
-pokemon SPECIES_BRONZOR
-pokemon SPECIES_CHINGLING
+pokemon SPECIES_NONE
+pokemon SPECIES_NONE
 
 // surf encounters
 encounter SPECIES_MAGIKARP, 10, 20
