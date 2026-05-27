@@ -647,7 +647,7 @@ superrodrate 0
 walklevels 3, 4, 3, 4, 5, 5, 3, 3, 6, 5, 6, 5
 
 // morning encounter slots
-pokemon SPECIES_PETLIL
+pokemon SPECIES_PETILIL
 pokemon SPECIES_HOPPIP
 pokemon SPECIES_BELLSPROUT
 pokemon SPECIES_CHERUBI
@@ -661,7 +661,7 @@ pokemon SPECIES_APPLIN
 pokemon SPECIES_BUDEW
 
 // day encounter slots
-pokemon SPECIES_PETLIL
+pokemon SPECIES_PETILIL
 pokemon SPECIES_HOPPIP
 pokemon SPECIES_BELLSPROUT
 pokemon SPECIES_CHERUBI
@@ -675,7 +675,7 @@ pokemon SPECIES_APPLIN
 pokemon SPECIES_BUDEW
 
 // night encounter slots
-pokemon SPECIES_PETLIL
+pokemon SPECIES_PETILIL
 pokemon SPECIES_HOPPIP
 pokemon SPECIES_BELLSPROUT
 pokemon SPECIES_CHERUBI
@@ -751,7 +751,7 @@ superrodrate 0
 walklevels 3, 4, 3, 4, 5, 5, 3, 3, 6, 5, 6, 5
 
 // morning encounter slots
-pokemon SPECIES_PETLIL
+pokemon SPECIES_PETILIL
 pokemon SPECIES_HOPPIP
 pokemon SPECIES_BELLSPROUT
 pokemon SPECIES_CHERUBI
@@ -765,7 +765,7 @@ pokemon SPECIES_APPLIN
 pokemon SPECIES_BUDEW
 
 // day encounter slots
-pokemon SPECIES_PETLIL
+pokemon SPECIES_PETILIL
 pokemon SPECIES_HOPPIP
 pokemon SPECIES_BELLSPROUT
 pokemon SPECIES_CHERUBI
@@ -779,7 +779,7 @@ pokemon SPECIES_APPLIN
 pokemon SPECIES_BUDEW
 
 // night encounter slots
-pokemon SPECIES_PETLIL
+pokemon SPECIES_PETILIL
 pokemon SPECIES_HOPPIP
 pokemon SPECIES_BELLSPROUT
 pokemon SPECIES_CHERUBI
