@@ -373,13 +373,11 @@ void LoadMegaIcon(struct BI_PARAM *bip)
     {
         csp = BattleWorkCATS_SYS_PTRGet(bip->bw);
         crp = BattleWorkCATS_RES_PTRGet(bip->bw);
-        void *pfd = BattleWorkPfdGet(bip->bw);
 
-        // 1. Load both pixel configurations AND color properties into Sub-VRAM
+        // 1. Only load the character data (exactly like the working Mega/Weather blocks)
         OAM_LoadResourceCharArc(csp, crp, ARC_BATTLE_GFX, TERA_ICON_FIGHT_GFX, 0, NNS_G2D_VRAM_TYPE_2DSUB, TERA_ICON_SPRITE_TAG);
-        OAM_LoadResourcePlttWorkArc(pfd, FADE_SUB_OBJ, csp, crp, ARC_BATTLE_GFX, TERA_ICON_FIGHT_GFX + 1, 0, 1, NNS_G2D_VRAM_TYPE_2DSUB, TERA_ICON_PAL_TAG);
 
-        // 2. Build the template explicitly from scratch using your exact structural blueprint
+        // 2. Build the template safely
         OAMSpriteTemplate teraTemplate = {
             155, // x coordinate
             161, // y coordinate
@@ -390,7 +388,7 @@ void LoadMegaIcon(struct BI_PARAM *bip)
             NNS_G2D_VRAM_TYPE_2DSUB,
             {
                 TERA_ICON_SPRITE_TAG,
-                TERA_ICON_PAL_TAG,
+                MEGA_ICON_PAL_TAG, // Borrowing the Mega palette for safety to prevent freezes!
                 TERA_ICON_CELL_TAG,
                 TERA_ICON_CELL_ANIM_TAG,
                 CLACT_U_HEADER_DATA_NONE,
@@ -400,11 +398,11 @@ void LoadMegaIcon(struct BI_PARAM *bip)
             0,
         };
 
-        // 3. Apply the double battle offset adjustments if necessary
+        // 3. Apply double battle offsets
         if (bip->client_no != 0)
             teraTemplate.x = 103; 
             
-        // 4. Register and draw the object
+        // 4. Register and draw
         newBS.TeraOAM = OAM_ObjectAdd_S(csp, crp, &teraTemplate);
         OAM_ObjectUpdate(newBS.TeraOAM->act);
     }
