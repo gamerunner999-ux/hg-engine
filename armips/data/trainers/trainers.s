@@ -664,7 +664,7 @@ trainerdata 20, "Falkner"
         ivs 50
         abilityslot 0
         level 14
-        pokemon SPECIES_ORICORIO, 1"
+        pokemon SPECIES_MISC_FORM_START + 102
         item ITEM_YACHE_BERRY
         move MOVE_OMINOUS_WIND
         move MOVE_AIR_CUTTER
