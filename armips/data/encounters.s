@@ -689,12 +689,12 @@ pokemon SPECIES_APPLIN
 pokemon SPECIES_BUDEW
 
 // hoenn encounter slots
-encounter SPECIES_NONE
-encounter SPECIES_NONE
+pokemon SPECIES_NONE
+pokemon SPECIES_NONE
 
 // sinnoh encounter slots
-encounter SPECIES_NONE
-encounter SPECIES_NONE
+pokemon SPECIES_NONE
+pokemon SPECIES_NONE
 
 // surf encounters
 encounter SPECIES_NONE, 0, 0
@@ -793,12 +793,12 @@ pokemon SPECIES_APPLIN
 pokemon SPECIES_BUDEW
 
 // hoenn encounter slots
-encounter SPECIES_NONE
-encounter SPECIES_NONE
+pokemon SPECIES_NONE
+pokemon SPECIES_NONE
 
 // sinnoh encounter slots
-encounter SPECIES_NONE
-encounter SPECIES_NONE
+pokemon SPECIES_NONE
+pokemon SPECIES_NONE
 
 // surf encounters
 encounter SPECIES_NONE, 0, 0
@@ -897,12 +897,12 @@ pokemon SPECIES_SPHEAL
 pokemon SPECIES_CHINCHOU
 
 // hoenn encounter slots
-encounter SPECIES_NONE
-encounter SPECIES_NONE
+pokemon SPECIES_NONE
+pokemon SPECIES_NONE
 
 // sinnoh encounter slots
-encounter SPECIES_NONE
-encounter SPECIES_NONE
+pokemon SPECIES_NONE
+pokemon SPECIES_NONE
 
 // surf encounters
 encounter SPECIES_TENTACOOL, 10, 20
