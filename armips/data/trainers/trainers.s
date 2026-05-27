@@ -614,7 +614,7 @@ trainerdata 19, "Mickey"
 trainerdata 20, "Falkner"
     trainermontype TRAINER_DATA_TYPE_ITEMS | TRAINER_DATA_TYPE_MOVES
     trainerclass TRAINERCLASS_LEADER_FALKNER
-    nummons 2
+    nummons 4
     item ITEM_NONE
     item ITEM_NONE
     item ITEM_NONE
@@ -627,25 +627,49 @@ trainerdata 20, "Falkner"
         // mon 0
         ivs 50
         abilityslot 0
-        level 9
-        pokemon SPECIES_PIDGEY
-        item ITEM_NONE
-        move MOVE_TACKLE
-        move MOVE_SAND_ATTACK
-        move MOVE_NONE
-        move MOVE_NONE
+        level 13
+        pokemon SPECIES_GLIGAR
+        item ITEM_ORAN_BERRY
+        move MOVE_AERIAL_ACE
+        move MOVE_BULLDOZE
+        move MOVE_WHIRLWIND
+        move MOVE_STEALTH_ROCK
         ballseal 0
 
         // mon 1
         ivs 50
         abilityslot 0
+        level 12
+        pokemon SPECIES_NINJASK
+        item ITEM_FOCUS_SASH
+        move MOVE_U_TURN
+        move MOVE_AERIAL_ACE
+        move MOVE_DETECT
+        move MOVE_NONE
+        ballseal 0
+
+        // mon 2
+        ivs 50
+        abilityslot 0
         level 13
         pokemon SPECIES_PIDGEOTTO
-        item ITEM_NONE
-        move MOVE_TACKLE
+        item ITEM_EVIOLITE
+        move MOVE_DUAL_WINGBEAT
+        move MOVE_HYPER_VOICE
+        move MOVE_MUD_SLAP
+        move MOVE_WHIRLWIND
+        ballseal 0
+
+        // mon 3  
+        ivs 50
+        abilityslot 0
+        level 14
+        pokemon SPECIES_ORICORIO_SENSU
+        item ITEM_YACHE_BERRY
+        move MOVE_OMINOUS_WIND
+        move MOVE_AIR_CUTTER
+        move MOVE_TRAILBLAZE
         move MOVE_ROOST
-        move MOVE_GUST
-        move MOVE_NONE
         ballseal 0
     endparty
 
