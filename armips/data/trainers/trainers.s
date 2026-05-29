@@ -667,7 +667,7 @@ trainerdata 20, "Falkner"
         monwithform SPECIES_ORICORIO, 3
         item ITEM_YACHE_BERRY
         move MOVE_OMINOUS_WIND
-        move MOVE_AIR_CUTTER
+        move MOVE_GUST
         move MOVE_TRAILBLAZE
         move MOVE_ROOST
         ballseal 0
