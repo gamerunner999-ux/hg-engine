@@ -595,11 +595,15 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
     case MON_DATA_TERA_TYPE:
     {
         u16 val = *(u16*)data;
-        u16 tmp = blockA->sinnohRibbons >> 16;   // RESERVED_114 lives here
-        tmp &= ~0x001F;                          // clear lower 5 bits
-        tmp |= (val & 0x1F);                     // store tera type
-        blockA->sinnohRibbons &= 0x0000FFFF;     // clear upper half
-        blockA->sinnohRibbons |= (tmp << 16);    // write back
+
+        // RESERVED_114 = bits 16–31 of sinnohRibbons
+        u32 sr = blockA->sinnohRibbons;
+
+        u16 reserved114 = (sr >> 16) & 0xFFFF;
+        reserved114 &= ~0x001F;          // clear lower 5 bits
+        reserved114 |= (val & 0x1F);     // store tera type
+
+        blockA->sinnohRibbons = (sr & 0x0000FFFF) | (reserved114 << 16);
         ret = TRUE;
         break;
     }
@@ -607,16 +611,21 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
     case MON_DATA_TERA_ACTIVE:
     {
         u8 val = *(u8*)data;
-        u8 tmp = (blockA->sinnohRibbons >> 24);  // RESERVED_113 lives here
+
+        // RESERVED_113 = bits 24–31 of sinnohRibbons
+        u32 sr = blockA->sinnohRibbons;
+
+        u8 reserved113 = (sr >> 24) & 0xFF;
         if (val)
-            tmp |= 0x04;
+            reserved113 |= 0x04;
         else
-            tmp &= ~0x04;
-        blockA->sinnohRibbons &= 0x00FFFFFF;
-        blockA->sinnohRibbons |= (tmp << 24);
+            reserved113 &= ~0x04;
+
+        blockA->sinnohRibbons = (sr & 0x00FFFFFF) | (reserved113 << 24);
         ret = TRUE;
         break;
     }
+
 
 
     }
@@ -667,17 +676,20 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
         break;
     case MON_DATA_TERA_TYPE:
     {
-        u16 tmp = (blockA->sinnohRibbons >> 16);
+        u32 sr = blockA->sinnohRibbons;
+        u16 reserved114 = (sr >> 16) & 0xFFFF;
         *retBool = TRUE;
-        return tmp & 0x1F;
+        return reserved114 & 0x1F;
     }
 
     case MON_DATA_TERA_ACTIVE:
     {
-        u8 tmp = (blockA->sinnohRibbons >> 24);
+        u32 sr = blockA->sinnohRibbons;
+        u8 reserved113 = (sr >> 24) & 0xFF;
         *retBool = TRUE;
-        return (tmp >> 2) & 1;
+        return (reserved113 >> 2) & 1;
     }
+
 
 
     }
