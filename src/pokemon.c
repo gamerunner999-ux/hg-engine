@@ -643,9 +643,6 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
     {
     case MON_DATA_ABILITY:
     {
-#ifdef DEBUG_BOXMONDATA_EDITED_CASES
-        debug_printf("Ability returned: %d\n", (blockA->abilityMSB << 8) | (blockA->ability));
-#endif
         ret = (blockA->abilityMSB << 8) | (blockA->ability);
         *retBool = TRUE;
         break;
@@ -654,24 +651,15 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
     {
         ret = blockA->exp;
         *retBool = TRUE;
-#ifdef DEBUG_BOXMONDATA_EDITED_CASES
-        debug_printf("Experience returned: %d\n", ret);
-#endif
         break;
     }
     case MON_DATA_MET_LEVEL:
         ret = blockD->metLevel;
         *retBool = TRUE;
-#ifdef DEBUG_BOXMONDATA_EDITED_CASES
-        debug_printf("Met level returned: %d\n", ret);
-#endif
         break;
     case MON_DATA_LEVEL:
         ret = CalcLevelBySpeciesAndExp(blockA->species, blockA->exp);
         *retBool = TRUE;
-#ifdef DEBUG_BOXMONDATA_EDITED_CASES
-        debug_printf("Current level returned: %d\n", ret);
-#endif
         break;
     case MON_DATA_TERA_TYPE:
     {
@@ -679,12 +667,12 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
         *retBool = TRUE;
         return tmp & 0x1F;     // lower 5 bits
     }
-
     case MON_DATA_TERA_ACTIVE:
     {
         u8 tmp = GetBoxMonData(blocks, MON_DATA_RESERVED_113, NULL);
         *retBool = TRUE;
         return (tmp >> 2) & 1; // bit 2
+    }
     }
 
 #ifdef DEBUG_BOXMONDATA_EDITED_CASES
@@ -692,6 +680,7 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
 #endif
     return ret;
 }
+
 
 /**
  *  @brief edited fields in AddBoxMonData.  can add new fields here and edit existing ones
@@ -1916,786 +1905,786 @@ void LONG_CALL ClearMonMoves(struct PartyPokemon *pokemon)
     }
 }
 
-/**
- *  @brief hatch a PartyPokemon--creates a new PartyPokemon and initializes a few characteristics
- *
- *  @param pokemon PartyPokemon that is hatching
- *  @param heapId heap whose memory to use
- */
-void sub_0206D328(struct PartyPokemon *pokemon, u32 heapId)
-{
-    u16 nickname[11 + 1];
-    u8 isEgg = 70;
-    u8 hasNickname = FALSE;
-    u8 pokeball = 4; // poke ball
-    u8 metLevel = 0;
-
-    u16 dummy_p2_1 = GetMonData(pokemon, MON_DATA_RESERVED_113, NULL); // hidden ability field
-
-    sub_0206D038(pokemon, heapId); // carries over egg values to a clean mon
-    SetMonData(pokemon, MON_DATA_IS_EGG, &isEgg);
-    GetSpeciesNameIntoArray(GetMonData(pokemon, MON_DATA_SPECIES, NULL), 0, nickname);
-    SetMonData(pokemon, MON_DATA_NICKNAME, nickname);
-    SetMonData(pokemon, MON_DATA_HAS_NICKNAME, &hasNickname);
-    SetMonData(pokemon, MON_DATA_POKEBALL, &pokeball);
-    SetMonData(pokemon, MON_DATA_MET_LEVEL, &metLevel);
-    SetMonData(pokemon, MON_DATA_RESERVED_113, &dummy_p2_1);
-    RecalcPartyPokemonStats(pokemon);
-
-    ResetPartyPokemonAbility(pokemon);
-}
-
-
-#define CRY_SPECIES_FORMS_BASE (MAX_MON_NUM+1)
-
-// need to be in order of form so that python script can generate the makefile
-#define CRY_SPECIES_SHAYMIN 0x1EE
-
-// megas
-#define CRY_SPECIES_BASE_VENUSAUR (CRY_SPECIES_FORMS_BASE)
-#define CRY_SPECIES_BASE_CHARIZARD_X (CRY_SPECIES_FORMS_BASE + 1)
-#define CRY_SPECIES_BASE_CHARIZARD_Y (CRY_SPECIES_FORMS_BASE + 2)
-#define CRY_SPECIES_BASE_BLASTOISE (CRY_SPECIES_FORMS_BASE + 3)
-#define CRY_SPECIES_BASE_BEEDRILL (CRY_SPECIES_FORMS_BASE + 4)
-#define CRY_SPECIES_BASE_PIDGEOT (CRY_SPECIES_FORMS_BASE + 5)
-#define CRY_SPECIES_BASE_ALAKAZAM (CRY_SPECIES_FORMS_BASE + 6)
-#define CRY_SPECIES_BASE_SLOWBRO (CRY_SPECIES_FORMS_BASE + 7)
-#define CRY_SPECIES_BASE_GENGAR (CRY_SPECIES_FORMS_BASE + 8)
-#define CRY_SPECIES_BASE_KANGASKHAN (CRY_SPECIES_FORMS_BASE + 9)
-#define CRY_SPECIES_BASE_PINSIR (CRY_SPECIES_FORMS_BASE + 10)
-#define CRY_SPECIES_BASE_GYARADOS (CRY_SPECIES_FORMS_BASE + 11)
-#define CRY_SPECIES_BASE_AERODACTYL (CRY_SPECIES_FORMS_BASE + 12)
-#define CRY_SPECIES_BASE_MEWTWO_X (CRY_SPECIES_FORMS_BASE + 13)
-#define CRY_SPECIES_BASE_MEWTWO_Y (CRY_SPECIES_FORMS_BASE + 14)
-#define CRY_SPECIES_BASE_AMPHAROS (CRY_SPECIES_FORMS_BASE + 15)
-#define CRY_SPECIES_BASE_STEELIX (CRY_SPECIES_FORMS_BASE + 16)
-#define CRY_SPECIES_BASE_SCIZOR (CRY_SPECIES_FORMS_BASE + 17)
-#define CRY_SPECIES_BASE_HERACROSS (CRY_SPECIES_FORMS_BASE + 18)
-#define CRY_SPECIES_BASE_HOUNDOOM (CRY_SPECIES_FORMS_BASE + 19)
-#define CRY_SPECIES_BASE_TYRANITAR (CRY_SPECIES_FORMS_BASE + 20)
-#define CRY_SPECIES_BASE_SCEPTILE (CRY_SPECIES_FORMS_BASE + 21)
-#define CRY_SPECIES_BASE_BLAZIKEN (CRY_SPECIES_FORMS_BASE + 22)
-#define CRY_SPECIES_BASE_SWAMPERT (CRY_SPECIES_FORMS_BASE + 23)
-#define CRY_SPECIES_BASE_GARDEVOIR (CRY_SPECIES_FORMS_BASE + 24)
-#define CRY_SPECIES_BASE_SABLEYE (CRY_SPECIES_FORMS_BASE + 25)
-#define CRY_SPECIES_BASE_MAWILE (CRY_SPECIES_FORMS_BASE + 26)
-#define CRY_SPECIES_BASE_AGGRON (CRY_SPECIES_FORMS_BASE + 27)
-#define CRY_SPECIES_BASE_MEDICHAM (CRY_SPECIES_FORMS_BASE + 28)
-#define CRY_SPECIES_BASE_MANECTRIC (CRY_SPECIES_FORMS_BASE + 29)
-#define CRY_SPECIES_BASE_SHARPEDO (CRY_SPECIES_FORMS_BASE + 30)
-#define CRY_SPECIES_BASE_CAMERUPT (CRY_SPECIES_FORMS_BASE + 31)
-#define CRY_SPECIES_BASE_ALTARIA (CRY_SPECIES_FORMS_BASE + 32)
-#define CRY_SPECIES_BASE_BANETTE (CRY_SPECIES_FORMS_BASE + 33)
-#define CRY_SPECIES_BASE_ABSOL (CRY_SPECIES_FORMS_BASE + 34)
-#define CRY_SPECIES_BASE_GLALIE (CRY_SPECIES_FORMS_BASE + 35)
-#define CRY_SPECIES_BASE_SALAMENCE (CRY_SPECIES_FORMS_BASE + 36)
-#define CRY_SPECIES_BASE_METAGROSS (CRY_SPECIES_FORMS_BASE + 37)
-#define CRY_SPECIES_BASE_LATIAS (CRY_SPECIES_FORMS_BASE + 38)
-#define CRY_SPECIES_BASE_LATIOS (CRY_SPECIES_FORMS_BASE + 39)
-#define CRY_SPECIES_BASE_RAYQUAZA (CRY_SPECIES_FORMS_BASE + 40)
-#define CRY_SPECIES_BASE_LOPUNNY (CRY_SPECIES_FORMS_BASE + 41)
-#define CRY_SPECIES_BASE_GARCHOMP (CRY_SPECIES_FORMS_BASE + 42)
-#define CRY_SPECIES_BASE_LUCARIO (CRY_SPECIES_FORMS_BASE + 43)
-#define CRY_SPECIES_BASE_ABOMASNOW (CRY_SPECIES_FORMS_BASE + 44)
-#define CRY_SPECIES_BASE_GALLADE (CRY_SPECIES_FORMS_BASE + 45)
-#define CRY_SPECIES_BASE_AUDINO (CRY_SPECIES_FORMS_BASE + 46)
-#define CRY_SPECIES_BASE_DIANCIE (CRY_SPECIES_FORMS_BASE + 47)
-
-// everything else
-#define CRY_SPECIES_BASE_TORNADUS (CRY_SPECIES_FORMS_BASE + 48)
-#define CRY_SPECIES_BASE_THUNDURUS (CRY_SPECIES_FORMS_BASE+1 + 48)
-#define CRY_SPECIES_BASE_LANDORUS (CRY_SPECIES_FORMS_BASE+2 + 48)
-#define CRY_SPECIES_BASE_KYUREM (CRY_SPECIES_FORMS_BASE+3 + 48)
-#define CRY_SPECIES_BASE_PUMPKABOO (CRY_SPECIES_FORMS_BASE+5 + 48)
-#define CRY_SPECIES_BASE_GOURGEIST (CRY_SPECIES_FORMS_BASE+6 + 48)
-#define CRY_SPECIES_BASE_HOOPA (CRY_SPECIES_FORMS_BASE+7 + 48)
-#define CRY_SPECIES_BASE_ORICORIO (CRY_SPECIES_FORMS_BASE+8 + 48)
-#define CRY_SPECIES_BASE_LYCANROC (CRY_SPECIES_FORMS_BASE+11 + 48)
-#define CRY_SPECIES_BASE_WISHIWASHI (CRY_SPECIES_FORMS_BASE+13 + 48)
-#define CRY_SPECIES_BASE_NECROZMA (CRY_SPECIES_FORMS_BASE+14 + 48)
-#define CRY_SPECIES_BASE_ZACIAN (CRY_SPECIES_FORMS_BASE+18 + 48)
-#define CRY_SPECIES_BASE_ZAMAZENTA (CRY_SPECIES_FORMS_BASE+19 + 48)
-#define CRY_SPECIES_BASE_URSHIFU (CRY_SPECIES_FORMS_BASE+20 + 48)
-#define CRY_SPECIES_BASE_CALYREX (CRY_SPECIES_FORMS_BASE+21 + 48)
-#define CRY_SPECIES_BASE_ENAMORUS (CRY_SPECIES_FORMS_BASE+23 + 48)
-#define CRY_SPECIES_BASE_MAUSHOLD (CRY_SPECIES_FORMS_BASE+24 + 48)
-
-u32 storeShayminForm = 0;
-
-/**
- *  @brief grab the cry index given species and form
- *
- *  @param species species index
- *  @param form form number
- *  @return cry index in sdat
- */
-u32 GrabCryNumSpeciesForm(u32 species, u32 form)
-{
-    u32 newSpecies = 0;
-
-    // manually map all of the limbo slots to bulbasaur's cry
-    if (species > SPECIES_ARCEUS && species < SPECIES_VICTINI) {
-        species = SPECIES_BULBASAUR;
-    }
-
-    //debug_printf("[GrabCryNumSpeciesForm] species = %d, form = %d\n", species, form)
-
-    // battles are fucking stupid and pass in species already adjusted for form.  need to revert to base species and extract form
-    if (species > MAX_MON_NUM) {
-        // if form-adjusted species is passed in, no need to call it to grab it again
-        newSpecies = species;
-        form = GetFormFromAdjustedForm(species);
-        species = GetBaseSpeciesFromAdjustedForm(species);
-    }
-    // shaymin has to have some hacks to get this to work proper because of the same battle stuff above
-    else if (species == SPECIES_SHAYMIN) {
-        register u32 retAddr asm("lr");
-        if (retAddr == 0x020069BF)
-            storeShayminForm = form;
-        else if (retAddr == 0x020063E5 || retAddr == 0x02006241)
-            if (!storeShayminForm)
-                return species;
-    }
-    else if (form == 0) // can just return species for the cry if it is base form
+    /**
+     *  @brief hatch a PartyPokemon--creates a new PartyPokemon and initializes a few characteristics
+     *
+     *  @param pokemon PartyPokemon that is hatching
+     *  @param heapId heap whose memory to use
+     */
+    void sub_0206D328(struct PartyPokemon *pokemon, u32 heapId)
     {
+        u16 nickname[11 + 1];
+        u8 isEgg = 70;
+        u8 hasNickname = FALSE;
+        u8 pokeball = 4; // poke ball
+        u8 metLevel = 0;
+
+        u16 dummy_p2_1 = GetMonData(pokemon, MON_DATA_RESERVED_113, NULL); // hidden ability field
+
+        sub_0206D038(pokemon, heapId); // carries over egg values to a clean mon
+        SetMonData(pokemon, MON_DATA_IS_EGG, &isEgg);
+        GetSpeciesNameIntoArray(GetMonData(pokemon, MON_DATA_SPECIES, NULL), 0, nickname);
+        SetMonData(pokemon, MON_DATA_NICKNAME, nickname);
+        SetMonData(pokemon, MON_DATA_HAS_NICKNAME, &hasNickname);
+        SetMonData(pokemon, MON_DATA_POKEBALL, &pokeball);
+        SetMonData(pokemon, MON_DATA_MET_LEVEL, &metLevel);
+        SetMonData(pokemon, MON_DATA_RESERVED_113, &dummy_p2_1);
+        RecalcPartyPokemonStats(pokemon);
+
+        ResetPartyPokemonAbility(pokemon);
+    }
+
+
+    #define CRY_SPECIES_FORMS_BASE (MAX_MON_NUM+1)
+
+    // need to be in order of form so that python script can generate the makefile
+    #define CRY_SPECIES_SHAYMIN 0x1EE
+
+    // megas
+    #define CRY_SPECIES_BASE_VENUSAUR (CRY_SPECIES_FORMS_BASE)
+    #define CRY_SPECIES_BASE_CHARIZARD_X (CRY_SPECIES_FORMS_BASE + 1)
+    #define CRY_SPECIES_BASE_CHARIZARD_Y (CRY_SPECIES_FORMS_BASE + 2)
+    #define CRY_SPECIES_BASE_BLASTOISE (CRY_SPECIES_FORMS_BASE + 3)
+    #define CRY_SPECIES_BASE_BEEDRILL (CRY_SPECIES_FORMS_BASE + 4)
+    #define CRY_SPECIES_BASE_PIDGEOT (CRY_SPECIES_FORMS_BASE + 5)
+    #define CRY_SPECIES_BASE_ALAKAZAM (CRY_SPECIES_FORMS_BASE + 6)
+    #define CRY_SPECIES_BASE_SLOWBRO (CRY_SPECIES_FORMS_BASE + 7)
+    #define CRY_SPECIES_BASE_GENGAR (CRY_SPECIES_FORMS_BASE + 8)
+    #define CRY_SPECIES_BASE_KANGASKHAN (CRY_SPECIES_FORMS_BASE + 9)
+    #define CRY_SPECIES_BASE_PINSIR (CRY_SPECIES_FORMS_BASE + 10)
+    #define CRY_SPECIES_BASE_GYARADOS (CRY_SPECIES_FORMS_BASE + 11)
+    #define CRY_SPECIES_BASE_AERODACTYL (CRY_SPECIES_FORMS_BASE + 12)
+    #define CRY_SPECIES_BASE_MEWTWO_X (CRY_SPECIES_FORMS_BASE + 13)
+    #define CRY_SPECIES_BASE_MEWTWO_Y (CRY_SPECIES_FORMS_BASE + 14)
+    #define CRY_SPECIES_BASE_AMPHAROS (CRY_SPECIES_FORMS_BASE + 15)
+    #define CRY_SPECIES_BASE_STEELIX (CRY_SPECIES_FORMS_BASE + 16)
+    #define CRY_SPECIES_BASE_SCIZOR (CRY_SPECIES_FORMS_BASE + 17)
+    #define CRY_SPECIES_BASE_HERACROSS (CRY_SPECIES_FORMS_BASE + 18)
+    #define CRY_SPECIES_BASE_HOUNDOOM (CRY_SPECIES_FORMS_BASE + 19)
+    #define CRY_SPECIES_BASE_TYRANITAR (CRY_SPECIES_FORMS_BASE + 20)
+    #define CRY_SPECIES_BASE_SCEPTILE (CRY_SPECIES_FORMS_BASE + 21)
+    #define CRY_SPECIES_BASE_BLAZIKEN (CRY_SPECIES_FORMS_BASE + 22)
+    #define CRY_SPECIES_BASE_SWAMPERT (CRY_SPECIES_FORMS_BASE + 23)
+    #define CRY_SPECIES_BASE_GARDEVOIR (CRY_SPECIES_FORMS_BASE + 24)
+    #define CRY_SPECIES_BASE_SABLEYE (CRY_SPECIES_FORMS_BASE + 25)
+    #define CRY_SPECIES_BASE_MAWILE (CRY_SPECIES_FORMS_BASE + 26)
+    #define CRY_SPECIES_BASE_AGGRON (CRY_SPECIES_FORMS_BASE + 27)
+    #define CRY_SPECIES_BASE_MEDICHAM (CRY_SPECIES_FORMS_BASE + 28)
+    #define CRY_SPECIES_BASE_MANECTRIC (CRY_SPECIES_FORMS_BASE + 29)
+    #define CRY_SPECIES_BASE_SHARPEDO (CRY_SPECIES_FORMS_BASE + 30)
+    #define CRY_SPECIES_BASE_CAMERUPT (CRY_SPECIES_FORMS_BASE + 31)
+    #define CRY_SPECIES_BASE_ALTARIA (CRY_SPECIES_FORMS_BASE + 32)
+    #define CRY_SPECIES_BASE_BANETTE (CRY_SPECIES_FORMS_BASE + 33)
+    #define CRY_SPECIES_BASE_ABSOL (CRY_SPECIES_FORMS_BASE + 34)
+    #define CRY_SPECIES_BASE_GLALIE (CRY_SPECIES_FORMS_BASE + 35)
+    #define CRY_SPECIES_BASE_SALAMENCE (CRY_SPECIES_FORMS_BASE + 36)
+    #define CRY_SPECIES_BASE_METAGROSS (CRY_SPECIES_FORMS_BASE + 37)
+    #define CRY_SPECIES_BASE_LATIAS (CRY_SPECIES_FORMS_BASE + 38)
+    #define CRY_SPECIES_BASE_LATIOS (CRY_SPECIES_FORMS_BASE + 39)
+    #define CRY_SPECIES_BASE_RAYQUAZA (CRY_SPECIES_FORMS_BASE + 40)
+    #define CRY_SPECIES_BASE_LOPUNNY (CRY_SPECIES_FORMS_BASE + 41)
+    #define CRY_SPECIES_BASE_GARCHOMP (CRY_SPECIES_FORMS_BASE + 42)
+    #define CRY_SPECIES_BASE_LUCARIO (CRY_SPECIES_FORMS_BASE + 43)
+    #define CRY_SPECIES_BASE_ABOMASNOW (CRY_SPECIES_FORMS_BASE + 44)
+    #define CRY_SPECIES_BASE_GALLADE (CRY_SPECIES_FORMS_BASE + 45)
+    #define CRY_SPECIES_BASE_AUDINO (CRY_SPECIES_FORMS_BASE + 46)
+    #define CRY_SPECIES_BASE_DIANCIE (CRY_SPECIES_FORMS_BASE + 47)
+
+    // everything else
+    #define CRY_SPECIES_BASE_TORNADUS (CRY_SPECIES_FORMS_BASE + 48)
+    #define CRY_SPECIES_BASE_THUNDURUS (CRY_SPECIES_FORMS_BASE+1 + 48)
+    #define CRY_SPECIES_BASE_LANDORUS (CRY_SPECIES_FORMS_BASE+2 + 48)
+    #define CRY_SPECIES_BASE_KYUREM (CRY_SPECIES_FORMS_BASE+3 + 48)
+    #define CRY_SPECIES_BASE_PUMPKABOO (CRY_SPECIES_FORMS_BASE+5 + 48)
+    #define CRY_SPECIES_BASE_GOURGEIST (CRY_SPECIES_FORMS_BASE+6 + 48)
+    #define CRY_SPECIES_BASE_HOOPA (CRY_SPECIES_FORMS_BASE+7 + 48)
+    #define CRY_SPECIES_BASE_ORICORIO (CRY_SPECIES_FORMS_BASE+8 + 48)
+    #define CRY_SPECIES_BASE_LYCANROC (CRY_SPECIES_FORMS_BASE+11 + 48)
+    #define CRY_SPECIES_BASE_WISHIWASHI (CRY_SPECIES_FORMS_BASE+13 + 48)
+    #define CRY_SPECIES_BASE_NECROZMA (CRY_SPECIES_FORMS_BASE+14 + 48)
+    #define CRY_SPECIES_BASE_ZACIAN (CRY_SPECIES_FORMS_BASE+18 + 48)
+    #define CRY_SPECIES_BASE_ZAMAZENTA (CRY_SPECIES_FORMS_BASE+19 + 48)
+    #define CRY_SPECIES_BASE_URSHIFU (CRY_SPECIES_FORMS_BASE+20 + 48)
+    #define CRY_SPECIES_BASE_CALYREX (CRY_SPECIES_FORMS_BASE+21 + 48)
+    #define CRY_SPECIES_BASE_ENAMORUS (CRY_SPECIES_FORMS_BASE+23 + 48)
+    #define CRY_SPECIES_BASE_MAUSHOLD (CRY_SPECIES_FORMS_BASE+24 + 48)
+
+    u32 storeShayminForm = 0;
+
+    /**
+     *  @brief grab the cry index given species and form
+     *
+     *  @param species species index
+     *  @param form form number
+     *  @return cry index in sdat
+     */
+    u32 GrabCryNumSpeciesForm(u32 species, u32 form)
+    {
+        u32 newSpecies = 0;
+
+        // manually map all of the limbo slots to bulbasaur's cry
+        if (species > SPECIES_ARCEUS && species < SPECIES_VICTINI) {
+            species = SPECIES_BULBASAUR;
+        }
+
+        //debug_printf("[GrabCryNumSpeciesForm] species = %d, form = %d\n", species, form)
+
+        // battles are fucking stupid and pass in species already adjusted for form.  need to revert to base species and extract form
+        if (species > MAX_MON_NUM) {
+            // if form-adjusted species is passed in, no need to call it to grab it again
+            newSpecies = species;
+            form = GetFormFromAdjustedForm(species);
+            species = GetBaseSpeciesFromAdjustedForm(species);
+        }
+        // shaymin has to have some hacks to get this to work proper because of the same battle stuff above
+        else if (species == SPECIES_SHAYMIN) {
+            register u32 retAddr asm("lr");
+            if (retAddr == 0x020069BF)
+                storeShayminForm = form;
+            else if (retAddr == 0x020063E5 || retAddr == 0x02006241)
+                if (!storeShayminForm)
+                    return species;
+        }
+        else if (form == 0) // can just return species for the cry if it is base form
+        {
+            return species;
+        }
+        else
+        {
+            // need to grab form-adjusted species otherwise
+            newSpecies = PokeOtherFormMonsNoGet(species, form);
+        }
+
+        // handle megas in a way such that it's not added to the already-bad switch
+        if (newSpecies >= SPECIES_MEGA_START && newSpecies <= MAX_MEGA_NUM)
+            return (newSpecies - SPECIES_MEGA_START + CRY_SPECIES_BASE_VENUSAUR);
+
+        // handle the rest of the species
+        switch (species)
+        {
+        case SPECIES_SHAYMIN:
+            return CRY_SPECIES_SHAYMIN; // form is already nonzero
+        case SPECIES_TORNADUS:
+            return CRY_SPECIES_BASE_TORNADUS;
+        case SPECIES_THUNDURUS:
+            return CRY_SPECIES_BASE_THUNDURUS;
+        case SPECIES_LANDORUS:
+            return CRY_SPECIES_BASE_LANDORUS;
+        case SPECIES_ENAMORUS:
+            return CRY_SPECIES_BASE_ENAMORUS;
+        case SPECIES_KYUREM:
+            return CRY_SPECIES_BASE_KYUREM + form-1;
+        case SPECIES_PUMPKABOO:
+            if (form == 3) return CRY_SPECIES_BASE_PUMPKABOO;
+            break;
+        case SPECIES_GOURGEIST:
+            if (form == 3) return CRY_SPECIES_BASE_GOURGEIST;
+            break;
+        case SPECIES_HOOPA:
+            return CRY_SPECIES_BASE_HOOPA;
+        case SPECIES_ORICORIO:
+            return CRY_SPECIES_BASE_ORICORIO + form-1;
+        case SPECIES_LYCANROC:
+            return CRY_SPECIES_BASE_LYCANROC + form-1;
+        case SPECIES_WISHIWASHI:
+            return CRY_SPECIES_BASE_WISHIWASHI;
+        case SPECIES_NECROZMA:
+            return CRY_SPECIES_BASE_NECROZMA + form-1;
+        case SPECIES_ZACIAN:
+            return CRY_SPECIES_BASE_ZACIAN;
+        case SPECIES_ZAMAZENTA:
+            return CRY_SPECIES_BASE_ZAMAZENTA;
+        case SPECIES_URSHIFU:
+            return CRY_SPECIES_BASE_URSHIFU;
+        case SPECIES_CALYREX:
+            return CRY_SPECIES_BASE_CALYREX + form-1;
+        case SPECIES_MAUSHOLD:
+            return CRY_SPECIES_BASE_MAUSHOLD;
+        }
         return species;
     }
-    else
+
+
+    // double battles triggerable
+
+    extern u32 gTriggerDouble;
+
+    /**
+     *  @brief add the PartyPokemon to the wild "Party"
+     *
+     *  @param fsys field system structure
+     *  @param pp PartyPokemon array to manipulate (is fully overwritten)
+     *  @param bw battle work structure
+     *  @param encData
+     *  @param encArea
+     *  @param encInfo
+     *  @return TRUE if both were successful; FALSE otherwise
+     */
+    u32 WildEncSingle(FieldSystem *fsys UNUSED, struct PartyPokemon *pp, void *bw, void *encData UNUSED, void *encArea, void *encInfo)
     {
-        // need to grab form-adjusted species otherwise
-        newSpecies = PokeOtherFormMonsNoGet(species, form);
-    }
+        u32 ret;
+        ret = SetEncountData(pp, 255, encInfo, encArea, 0, 1, bw);
 
-    // handle megas in a way such that it's not added to the already-bad switch
-    if (newSpecies >= SPECIES_MEGA_START && newSpecies <= MAX_MEGA_NUM)
-        return (newSpecies - SPECIES_MEGA_START + CRY_SPECIES_BASE_VENUSAUR);
-
-    // handle the rest of the species
-    switch (species)
-    {
-    case SPECIES_SHAYMIN:
-        return CRY_SPECIES_SHAYMIN; // form is already nonzero
-    case SPECIES_TORNADUS:
-        return CRY_SPECIES_BASE_TORNADUS;
-    case SPECIES_THUNDURUS:
-        return CRY_SPECIES_BASE_THUNDURUS;
-    case SPECIES_LANDORUS:
-        return CRY_SPECIES_BASE_LANDORUS;
-    case SPECIES_ENAMORUS:
-        return CRY_SPECIES_BASE_ENAMORUS;
-    case SPECIES_KYUREM:
-        return CRY_SPECIES_BASE_KYUREM + form-1;
-    case SPECIES_PUMPKABOO:
-        if (form == 3) return CRY_SPECIES_BASE_PUMPKABOO;
-        break;
-    case SPECIES_GOURGEIST:
-        if (form == 3) return CRY_SPECIES_BASE_GOURGEIST;
-        break;
-    case SPECIES_HOOPA:
-        return CRY_SPECIES_BASE_HOOPA;
-    case SPECIES_ORICORIO:
-        return CRY_SPECIES_BASE_ORICORIO + form-1;
-    case SPECIES_LYCANROC:
-        return CRY_SPECIES_BASE_LYCANROC + form-1;
-    case SPECIES_WISHIWASHI:
-        return CRY_SPECIES_BASE_WISHIWASHI;
-    case SPECIES_NECROZMA:
-        return CRY_SPECIES_BASE_NECROZMA + form-1;
-    case SPECIES_ZACIAN:
-        return CRY_SPECIES_BASE_ZACIAN;
-    case SPECIES_ZAMAZENTA:
-        return CRY_SPECIES_BASE_ZAMAZENTA;
-    case SPECIES_URSHIFU:
-        return CRY_SPECIES_BASE_URSHIFU;
-    case SPECIES_CALYREX:
-        return CRY_SPECIES_BASE_CALYREX + form-1;
-    case SPECIES_MAUSHOLD:
-        return CRY_SPECIES_BASE_MAUSHOLD;
-    }
-    return species;
-}
-
-
-// double battles triggerable
-
-extern u32 gTriggerDouble;
-
-/**
- *  @brief add the PartyPokemon to the wild "Party"
- *
- *  @param fsys field system structure
- *  @param pp PartyPokemon array to manipulate (is fully overwritten)
- *  @param bw battle work structure
- *  @param encData
- *  @param encArea
- *  @param encInfo
- *  @return TRUE if both were successful; FALSE otherwise
- */
-u32 WildEncSingle(FieldSystem *fsys UNUSED, struct PartyPokemon *pp, void *bw, void *encData UNUSED, void *encArea, void *encInfo)
-{
-    u32 ret;
-    ret = SetEncountData(pp, 255, encInfo, encArea, 0, 1, bw);
-
-#ifdef IMPLEMENT_WILD_DOUBLE_BATTLES
-
-    if (gTriggerDouble)
-    {
-        ret = SetEncountData(pp, 255, encInfo, encArea, 0, 1, bw); // add another mon to the enemy party
-    }
-
-#endif
-
-    return ret;
-}
-
-/**
- *  @brief add PartyPokemon to the wild "Party" in surfing contexts
- *
- *  @param fsys field system structure
- *  @param pp PartyPokemon array to manipulate (is fully overwritten)
- *  @param bw battle work structure
- *  @param encArea
- *  @param encInfo
- *  @param smth
- *  @return TRUE if both were successful; FALSE otherwise
- */
-u32 WildWaterEncSingle(FieldSystem *fsys, struct PartyPokemon *pp, void *bw, void *encArea, void *encInfo, BOOL smth)
-{
-    u32 ret;
-    if (smth)
-    {
-        ret = SetEncountDataSwarm_maybe(fsys, pp, 255, encInfo, 1, 1, bw);
-
-#ifdef IMPLEMENT_WILD_DOUBLE_BATTLES
+    #ifdef IMPLEMENT_WILD_DOUBLE_BATTLES
 
         if (gTriggerDouble)
         {
-            ret = SetEncountDataSwarm_maybe(fsys, pp, 255, encInfo, 1, 1, bw); // add another mon to the enemy party
+            ret = SetEncountData(pp, 255, encInfo, encArea, 0, 1, bw); // add another mon to the enemy party
         }
 
-#endif
+    #endif
+
+        return ret;
     }
-    else
+
+    /**
+     *  @brief add PartyPokemon to the wild "Party" in surfing contexts
+     *
+     *  @param fsys field system structure
+     *  @param pp PartyPokemon array to manipulate (is fully overwritten)
+     *  @param bw battle work structure
+     *  @param encArea
+     *  @param encInfo
+     *  @param smth
+     *  @return TRUE if both were successful; FALSE otherwise
+     */
+    u32 WildWaterEncSingle(FieldSystem *fsys, struct PartyPokemon *pp, void *bw, void *encArea, void *encInfo, BOOL smth)
     {
-        ret = SetEncountData(pp, 255, encInfo, encArea, 1, 1, bw);
-
-#ifdef IMPLEMENT_WILD_DOUBLE_BATTLES
-
-        if (gTriggerDouble)
+        u32 ret;
+        if (smth)
         {
-            ret = SetEncountData(pp, 255, encInfo, encArea, 1, 1, bw); // add another mon to the enemy party
+            ret = SetEncountDataSwarm_maybe(fsys, pp, 255, encInfo, 1, 1, bw);
+
+    #ifdef IMPLEMENT_WILD_DOUBLE_BATTLES
+
+            if (gTriggerDouble)
+            {
+                ret = SetEncountDataSwarm_maybe(fsys, pp, 255, encInfo, 1, 1, bw); // add another mon to the enemy party
+            }
+
+    #endif
+        }
+        else
+        {
+            ret = SetEncountData(pp, 255, encInfo, encArea, 1, 1, bw);
+
+    #ifdef IMPLEMENT_WILD_DOUBLE_BATTLES
+
+            if (gTriggerDouble)
+            {
+                ret = SetEncountData(pp, 255, encInfo, encArea, 1, 1, bw); // add another mon to the enemy party
+            }
+
+    #endif
         }
 
-#endif
+        return ret;
     }
 
-    return ret;
-}
-
-/**
- *  @brief check if a poké ball can be used from the bag in wild double battles
- *         checks if both wild mons are still alive
- *
- *  @param sp global battle structure
- *  @return TRUE if can use the poké ball; FALSE otherwise
- */
-u32 CheckCanUseBallOnDoublesFromBag(struct BattleStruct *sp)
-{
-    if (sp->battlemon[1].hp && sp->battlemon[3].hp)
+    /**
+     *  @brief check if a poké ball can be used from the bag in wild double battles
+     *         checks if both wild mons are still alive
+     *
+     *  @param sp global battle structure
+     *  @return TRUE if can use the poké ball; FALSE otherwise
+     */
+    u32 CheckCanUseBallOnDoublesFromBag(struct BattleStruct *sp)
     {
-        return FALSE;
-    }
-    return TRUE;
-}
-
-/**
- *  @brief get level cap from the script variable defined by LEVEL_CAP_VARIABLE
- *
- *  @return level cap from LEVEL_CAP_VARIABLE script variable or 100 if it's not set at all
- */
-u32 LONG_CALL GetLevelCap(void)
-{
-#ifdef IMPLEMENT_LEVEL_CAP
-    u32 levelCap = GetScriptVar(LEVEL_CAP_VARIABLE);
-    if (levelCap > 100 || levelCap == 0) levelCap = 100;
-    return levelCap;
-#else
-    return 100;
-#endif // IMPLEMENT_LEVEL_CAP
-}
-
-/**
- *  @brief check if the level is at or above the level cap defined in LEVEL_CAP_VARIABLE
- *
- *  @param level level to check
- *  @return TRUE if level >= level cap; FALSE otherwise
- */
-u32 LONG_CALL IsLevelAtLevelCap(u32 level)
-{
-    return (level >= GetLevelCap());
-}
-
-
-#ifdef IMPLEMENT_LEVEL_CAP
-
-/**
- *  @brief try leveling up a PartyPokemon
- *
- *  @param mon PartyPokemon to level up
- *  @return TRUE if PartyPokemon should level up and level has been augmented
- */
-BOOL Pokemon_TryLevelUp(struct PartyPokemon *mon) {
-    u16 species = (u16)GetMonData(mon, MON_DATA_SPECIES, NULL);
-    u8 level = (u8)(GetMonData(mon, MON_DATA_LEVEL, NULL) + 1);
-    u32 exp = GetMonData(mon, MON_DATA_EXPERIENCE, NULL);
-    u32 growthrate = (u32)PokePersonalParaGet(species, PERSONAL_EXP_GROUP);
-    u32 maxexp = GetExpByGrowthRateAndLevel((int)growthrate, GetLevelCap());
-    if (exp > maxexp) {
-        exp = maxexp;
-        SetMonData(mon, MON_DATA_EXPERIENCE, &exp);
-    }
-    if (level > GetLevelCap())
-        return FALSE;
-    if (exp >= GetExpByGrowthRateAndLevel((int)growthrate, level)) {
-        SetMonData(mon, MON_DATA_LEVEL, &level);
+        if (sp->battlemon[1].hp && sp->battlemon[3].hp)
+        {
+            return FALSE;
+        }
         return TRUE;
     }
-    return FALSE;
-}
 
-#endif
-
-
-/**
- *  @brief grab the nature of a BoxPokemon factoring in the nature mint override field
- *
- *  @param boxMon BoxPokemon whose nature to grab
- *  @return nature of the BoxPokemon factoring in nature override
- */
-u8 LONG_CALL GetBoxMonNatureCountMints(struct BoxPokemon *boxMon)
-{
-    BOOL decry = BoxMonSetFastModeOn(boxMon);
-    u32 personality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
-    u32 nature_override = GET_BOX_MON_NATURE_OVERRIDE(boxMon);
-    BoxMonSetFastModeOff(boxMon, decry);
-
-    if (nature_override != 0) {
-        return nature_override - 1;
-    }
-    // lord forgive me, i know not what i do
-    // modulo operator in this world is only signed!  0x80000000 % 25 = 23
-    // could just use GetNatureFromPersonality from the rom, but this was a good exercise anyway
-    if (personality & 0x80000000)
-        personality = ((((u32)personality & 0x7FFFFFFF) % 25) + 23) % 25;
-    else
-        personality %= 25;
-
-    return personality;
-}
-
-/**
- *  @brief grab the encounter slot that should be forced when static/magnet pull proc
- *         needed to fix the crash caused by static and magnet pull
- *
- *  @param inData WildEncounterWork array to parse through for matching type
- *  @param inListNum amount of entries in inData
- *  @param type type to check for
- *  @param outNo encounter slot that is forced
- */
-BOOL SetFixedWildEncounter(const WildEncounterWork *inData, const u8 inListNum, const u8 type, u8 * outNo)
-{
-    u8 same_type[12];
-    u32 cnt, i, type1, type2;
-    for (i = 0; i < 12; i++)
+    /**
+     *  @brief get level cap from the script variable defined by LEVEL_CAP_VARIABLE
+     *
+     *  @return level cap from LEVEL_CAP_VARIABLE script variable or 100 if it's not set at all
+     */
+    u32 LONG_CALL GetLevelCap(void)
     {
-        same_type[i] = 0;
+    #ifdef IMPLEMENT_LEVEL_CAP
+        u32 levelCap = GetScriptVar(LEVEL_CAP_VARIABLE);
+        if (levelCap > 100 || levelCap == 0) levelCap = 100;
+        return levelCap;
+    #else
+        return 100;
+    #endif // IMPLEMENT_LEVEL_CAP
     }
-    cnt = 0;
-    for (i = 0; i < inListNum; i++)
+
+    /**
+     *  @brief check if the level is at or above the level cap defined in LEVEL_CAP_VARIABLE
+     *
+     *  @param level level to check
+     *  @return TRUE if level >= level cap; FALSE otherwise
+     */
+    u32 LONG_CALL IsLevelAtLevelCap(u32 level)
     {
-        u16 newSpecies = PokeOtherFormMonsNoGet(inData[i].species, inData[i].form);
-        type1 = PokePersonalParaGet(newSpecies, PERSONAL_TYPE_1);
-        type2 = PokePersonalParaGet(newSpecies, PERSONAL_TYPE_2);
-        if ((type1 == type) || (type2 == type))
-        {
-            same_type[cnt++] = i;
+        return (level >= GetLevelCap());
+    }
+
+
+    #ifdef IMPLEMENT_LEVEL_CAP
+
+    /**
+     *  @brief try leveling up a PartyPokemon
+     *
+     *  @param mon PartyPokemon to level up
+     *  @return TRUE if PartyPokemon should level up and level has been augmented
+     */
+    BOOL Pokemon_TryLevelUp(struct PartyPokemon *mon) {
+        u16 species = (u16)GetMonData(mon, MON_DATA_SPECIES, NULL);
+        u8 level = (u8)(GetMonData(mon, MON_DATA_LEVEL, NULL) + 1);
+        u32 exp = GetMonData(mon, MON_DATA_EXPERIENCE, NULL);
+        u32 growthrate = (u32)PokePersonalParaGet(species, PERSONAL_EXP_GROUP);
+        u32 maxexp = GetExpByGrowthRateAndLevel((int)growthrate, GetLevelCap());
+        if (exp > maxexp) {
+            exp = maxexp;
+            SetMonData(mon, MON_DATA_EXPERIENCE, &exp);
         }
-    }
-    if (cnt == 0 || cnt == inListNum)
-    {
+        if (level > GetLevelCap())
+            return FALSE;
+        if (exp >= GetExpByGrowthRateAndLevel((int)growthrate, level)) {
+            SetMonData(mon, MON_DATA_LEVEL, &level);
+            return TRUE;
+        }
         return FALSE;
     }
-    *outNo = same_type[gf_rand() % cnt];
-    return TRUE;
-}
 
-/**
- *  @brief perform shiny check given ot id and pid
- *
- *  @param otid original trainer id
- *  @param pid personality id
- *  @returns TRUE if otid and pid show a shiny pokémon; FALSE otherwise
- */
-BOOL LONG_CALL CalcShininessByOtIdAndPersonality(u32 otid, u32 pid)
-{
-    return SHINY_CHECK(otid, pid);
-}
+    #endif
 
-/**
- *  @brief adjust the pid to be shiny such that it keeps substructures in the same order
- *
- *  @param otid original trainer id
- *  @param pid personality id
- *  @returns adjusted pid to be a shiny without corrupting the mon
- */
-u32 LONG_CALL GenerateShinyPIDKeepSubstructuresIntact(u32 otId, u32 pid)
-{
-    /*
-        see: https://github.com/pret/pokeheartgold/blob/4d4037e05713e267b337aeb81abcbdd395c1f3ac/src/pokemon.c#L3955
-        substructure order is determined in GetSubstruct at the above link.  it uses the 5 bits occupied by 0x0003E000 to select the order.
-        when generating this, i just add the random number at the end to prevent every shiny given out this way from being a square shiny
+
+    /**
+     *  @brief grab the nature of a BoxPokemon factoring in the nature mint override field
+     *
+     *  @param boxMon BoxPokemon whose nature to grab
+     *  @return nature of the BoxPokemon factoring in nature override
+     */
+    u8 LONG_CALL GetBoxMonNatureCountMints(struct BoxPokemon *boxMon)
+    {
+        BOOL decry = BoxMonSetFastModeOn(boxMon);
+        u32 personality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
+        u32 nature_override = GET_BOX_MON_NATURE_OVERRIDE(boxMon);
+        BoxMonSetFastModeOff(boxMon, decry);
+
+        if (nature_override != 0) {
+            return nature_override - 1;
+        }
+        // lord forgive me, i know not what i do
+        // modulo operator in this world is only signed!  0x80000000 % 25 = 23
+        // could just use GetNatureFromPersonality from the rom, but this was a good exercise anyway
+        if (personality & 0x80000000)
+            personality = ((((u32)personality & 0x7FFFFFFF) % 25) + 23) % 25;
+        else
+            personality %= 25;
+
+        return personality;
+    }
+
+    /**
+     *  @brief grab the encounter slot that should be forced when static/magnet pull proc
+     *         needed to fix the crash caused by static and magnet pull
+     *
+     *  @param inData WildEncounterWork array to parse through for matching type
+     *  @param inListNum amount of entries in inData
+     *  @param type type to check for
+     *  @param outNo encounter slot that is forced
+     */
+    BOOL SetFixedWildEncounter(const WildEncounterWork *inData, const u8 inListNum, const u8 type, u8 * outNo)
+    {
+        u8 same_type[12];
+        u32 cnt, i, type1, type2;
+        for (i = 0; i < 12; i++)
+        {
+            same_type[i] = 0;
+        }
+        cnt = 0;
+        for (i = 0; i < inListNum; i++)
+        {
+            u16 newSpecies = PokeOtherFormMonsNoGet(inData[i].species, inData[i].form);
+            type1 = PokePersonalParaGet(newSpecies, PERSONAL_TYPE_1);
+            type2 = PokePersonalParaGet(newSpecies, PERSONAL_TYPE_2);
+            if ((type1 == type) || (type2 == type))
+            {
+                same_type[cnt++] = i;
+            }
+        }
+        if (cnt == 0 || cnt == inListNum)
+        {
+            return FALSE;
+        }
+        *outNo = same_type[gf_rand() % cnt];
+        return TRUE;
+    }
+
+    /**
+     *  @brief perform shiny check given ot id and pid
+     *
+     *  @param otid original trainer id
+     *  @param pid personality id
+     *  @returns TRUE if otid and pid show a shiny pokémon; FALSE otherwise
+     */
+    BOOL LONG_CALL CalcShininessByOtIdAndPersonality(u32 otid, u32 pid)
+    {
+        return SHINY_CHECK(otid, pid);
+    }
+
+    /**
+     *  @brief adjust the pid to be shiny such that it keeps substructures in the same order
+     *
+     *  @param otid original trainer id
+     *  @param pid personality id
+     *  @returns adjusted pid to be a shiny without corrupting the mon
+     */
+    u32 LONG_CALL GenerateShinyPIDKeepSubstructuresIntact(u32 otId, u32 pid)
+    {
+        /*
+            see: https://github.com/pret/pokeheartgold/blob/4d4037e05713e267b337aeb81abcbdd395c1f3ac/src/pokemon.c#L3955
+            substructure order is determined in GetSubstruct at the above link.  it uses the 5 bits occupied by 0x0003E000 to select the order.
+            when generating this, i just add the random number at the end to prevent every shiny given out this way from being a square shiny
+        */
+        u32 shinyValue = SHINY_VALUE(otId, pid);
+        if (shinyValue >= SHINY_ODDS) // xoring pid with shinyValue will give shiny but may corrupt substruct order
+        {
+            if (shinyValue & 0xE000)
+                pid = pid ^ ((shinyValue << 16) & 0xE0000000);
+            pid = pid ^ (shinyValue & 0x1FFF);
+            // shinyValue is now 0.  any xor must keep the shinyValue below SHINY_ODDS--should be fine to just generate a random number 0-SHINY_ODDS and xor it
+            pid = pid ^ (gf_rand() % (SHINY_ODDS));
+        }
+        return pid;
+    }
+
+    /**
+     *  @brief try learning a move upon level up
+    *          edited to allow for moves to be learned on evolution at level 0
+    *
+    *  @param mon PartyPokemon whose level is checked for moves
+    *  @param last_i last entry in the level up learnset table that was checked
+    *  @param sp0 pointer to a u16 that contains the move constant
+    *  @return (u16)-1u if the mon's learnset is full, (u16)-2u if the mon already knows the move, and the move index if the mon had the move successfully added
     */
-    u32 shinyValue = SHINY_VALUE(otId, pid);
-    if (shinyValue >= SHINY_ODDS) // xoring pid with shinyValue will give shiny but may corrupt substruct order
+    u32 MonTryLearnMoveOnLevelUp(struct PartyPokemon *mon, int * last_i, u16 * sp0)
     {
-        if (shinyValue & 0xE000)
-            pid = pid ^ ((shinyValue << 16) & 0xE0000000);
-        pid = pid ^ (shinyValue & 0x1FFF);
-        // shinyValue is now 0.  any xor must keep the shinyValue below SHINY_ODDS--should be fine to just generate a random number 0-SHINY_ODDS and xor it
-        pid = pid ^ (gf_rand() % (SHINY_ODDS));
-    }
-    return pid;
-}
+        BOOL isMonEvolving = FALSE;
+        register u32 retAddr asm("lr");
+        if (retAddr == 0x020764EB) // right at the end of the massive evolution callback
+        {
+            isMonEvolving = TRUE;
+        }
+        u32 ret = 0;
+        u32 *levelUpLearnset = sys_AllocMemory(HEAPID_DEFAULT, MAX_LEVELUP_MOVES * sizeof(u32));
+        u32 species = (u16)GetMonData(mon, MON_DATA_SPECIES, NULL);
+        u32 form = GetMonData(mon, MON_DATA_FORM, NULL);
+        u32 level = (u8)GetMonData(mon, MON_DATA_LEVEL, NULL);
 
-/**
- *  @brief try learning a move upon level up
-*          edited to allow for moves to be learned on evolution at level 0
- *
- *  @param mon PartyPokemon whose level is checked for moves
- *  @param last_i last entry in the level up learnset table that was checked
- *  @param sp0 pointer to a u16 that contains the move constant
- *  @return (u16)-1u if the mon's learnset is full, (u16)-2u if the mon already knows the move, and the move index if the mon had the move successfully added
- */
-u32 MonTryLearnMoveOnLevelUp(struct PartyPokemon *mon, int * last_i, u16 * sp0)
-{
-    BOOL isMonEvolving = FALSE;
-    register u32 retAddr asm("lr");
-    if (retAddr == 0x020764EB) // right at the end of the massive evolution callback
-    {
-        isMonEvolving = TRUE;
-    }
-    u32 ret = 0;
-    u32 *levelUpLearnset = sys_AllocMemory(HEAPID_DEFAULT, MAX_LEVELUP_MOVES * sizeof(u32));
-    u32 species = (u16)GetMonData(mon, MON_DATA_SPECIES, NULL);
-    u32 form = GetMonData(mon, MON_DATA_FORM, NULL);
-    u32 level = (u8)GetMonData(mon, MON_DATA_LEVEL, NULL);
+        LoadLevelUpLearnset_HandleAlternateForm(species, (int)form, levelUpLearnset);
 
-    LoadLevelUpLearnset_HandleAlternateForm(species, (int)form, levelUpLearnset);
+        if (isMonEvolving && LEVEL_UP_LEARNSET_LEVEL(levelUpLearnset[*last_i]) == 0) // when evolving, try to learn moves at level 0
+            level = 0;
 
-    if (isMonEvolving && LEVEL_UP_LEARNSET_LEVEL(levelUpLearnset[*last_i]) == 0) // when evolving, try to learn moves at level 0
-        level = 0;
-
-    if (levelUpLearnset[*last_i] == LEVEL_UP_LEARNSET_END)
-    {
-        sys_FreeMemoryEz(levelUpLearnset);
-        return 0;
-    }
-    while ((levelUpLearnset[*last_i] & LEVEL_UP_LEARNSET_LEVEL_MASK) != (level << LEVEL_UP_LEARNSET_LEVEL_SHIFT))
-    {
-        (*last_i)++;
-        if (levelUpLearnset[*last_i] == LEVEL_UP_LEARNSET_END) {
+        if (levelUpLearnset[*last_i] == LEVEL_UP_LEARNSET_END)
+        {
             sys_FreeMemoryEz(levelUpLearnset);
             return 0;
         }
-        if (isMonEvolving) // if a mon is evolving, it is possible that the current level move also corresponds with a move that it learns on evolution.  need to skip the entry if it has already been attempted to learn a move
+        while ((levelUpLearnset[*last_i] & LEVEL_UP_LEARNSET_LEVEL_MASK) != (level << LEVEL_UP_LEARNSET_LEVEL_SHIFT))
         {
-            u32 currMove = LEVEL_UP_LEARNSET_MOVE(levelUpLearnset[*last_i]);
-            for (s32 i = 0; i < *last_i; i++)
+            (*last_i)++;
+            if (levelUpLearnset[*last_i] == LEVEL_UP_LEARNSET_END) {
+                sys_FreeMemoryEz(levelUpLearnset);
+                return 0;
+            }
+            if (isMonEvolving) // if a mon is evolving, it is possible that the current level move also corresponds with a move that it learns on evolution.  need to skip the entry if it has already been attempted to learn a move
             {
-                if (LEVEL_UP_LEARNSET_MOVE(levelUpLearnset[i]) == currMove && LEVEL_UP_LEARNSET_LEVEL(levelUpLearnset[i]) == 0)
+                u32 currMove = LEVEL_UP_LEARNSET_MOVE(levelUpLearnset[*last_i]);
+                for (s32 i = 0; i < *last_i; i++)
                 {
-                    (*last_i)++;
-                    break;
+                    if (LEVEL_UP_LEARNSET_MOVE(levelUpLearnset[i]) == currMove && LEVEL_UP_LEARNSET_LEVEL(levelUpLearnset[i]) == 0)
+                    {
+                        (*last_i)++;
+                        break;
+                    }
                 }
             }
         }
-    }
-    if ((levelUpLearnset[*last_i] & LEVEL_UP_LEARNSET_LEVEL_MASK) == (level << LEVEL_UP_LEARNSET_LEVEL_SHIFT))
-    {
-        *sp0 = LEVEL_UP_LEARNSET_MOVE(levelUpLearnset[*last_i]);
-        (*last_i)++;
-#ifdef BLOCK_LEARNING_UNIMPLEMENTED_MOVES
-        if (!IsMoveUnimplemented(*sp0))
-#endif
+        if ((levelUpLearnset[*last_i] & LEVEL_UP_LEARNSET_LEVEL_MASK) == (level << LEVEL_UP_LEARNSET_LEVEL_SHIFT))
         {
-            ret = TryAppendMonMove(mon, *sp0);
+            *sp0 = LEVEL_UP_LEARNSET_MOVE(levelUpLearnset[*last_i]);
+            (*last_i)++;
+    #ifdef BLOCK_LEARNING_UNIMPLEMENTED_MOVES
+            if (!IsMoveUnimplemented(*sp0))
+    #endif
+            {
+                ret = TryAppendMonMove(mon, *sp0);
+            }
+        }
+        sys_FreeMemoryEz(levelUpLearnset);
+        return ret;
+    }
+
+    const u8 sTrainerGenders[] = {
+        [TRAINERCLASS_PKMN_TRAINER_ETHAN] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_TRAINER_LYRA] = TRAINER_FEMALE,
+        [TRAINERCLASS_YOUNGSTER] = TRAINER_MALE,
+        [TRAINERCLASS_LASS] = TRAINER_FEMALE,
+        [TRAINERCLASS_CAMPER] = TRAINER_MALE,
+        [TRAINERCLASS_PICNICKER] = TRAINER_FEMALE,
+        [TRAINERCLASS_BUG_CATCHER] = TRAINER_MALE,
+        [TRAINERCLASS_AROMA_LADY] = TRAINER_FEMALE,
+        [TRAINERCLASS_TWINS] = TRAINER_FEMALE,
+        [TRAINERCLASS_HIKER] = TRAINER_MALE,
+        [TRAINERCLASS_BATTLE_GIRL] = TRAINER_FEMALE,
+        [TRAINERCLASS_FISHERMAN] = TRAINER_MALE,
+        [TRAINERCLASS_CYCLIST_M] = TRAINER_MALE,
+        [TRAINERCLASS_CYCLIST_F] = TRAINER_FEMALE,
+        [TRAINERCLASS_BLACK_BELT] = TRAINER_MALE,
+        [TRAINERCLASS_ARTIST] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_BREEDER_M] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_BREEDER_F] = TRAINER_FEMALE,
+        [TRAINERCLASS_COWGIRL] = TRAINER_FEMALE,
+        [TRAINERCLASS_JOGGER] = TRAINER_MALE,
+        [TRAINERCLASS_POKEFAN_M] = TRAINER_MALE,
+        [TRAINERCLASS_POKEFAN] = TRAINER_FEMALE,
+        [TRAINERCLASS_POKE_KID] = TRAINER_FEMALE,
+        [TRAINERCLASS_RIVAL] = TRAINER_MALE,
+        [TRAINERCLASS_ACE_TRAINER_M] = TRAINER_MALE,
+        [TRAINERCLASS_ACE_TRAINER_F] = TRAINER_FEMALE,
+        [TRAINERCLASS_WAITRESS] = TRAINER_FEMALE,
+        [TRAINERCLASS_VETERAN] = TRAINER_MALE,
+        [TRAINERCLASS_NINJA_BOY] = TRAINER_MALE,
+        [TRAINERCLASS_DRAGON_TAMER] = TRAINER_MALE,
+        [TRAINERCLASS_BIRD_KEEPER] = TRAINER_FEMALE,
+        [TRAINERCLASS_JUGGLER] = TRAINER_MALE,
+        [TRAINERCLASS_RICH_BOY] = TRAINER_MALE,
+        [TRAINERCLASS_LADY] = TRAINER_FEMALE,
+        [TRAINERCLASS_GENTLEMAN] = TRAINER_MALE,
+        [TRAINERCLASS_SOCIALITE] = TRAINER_FEMALE,
+        [TRAINERCLASS_BEAUTY] = TRAINER_FEMALE,
+        [TRAINERCLASS_COLLECTOR] = TRAINER_MALE,
+        [TRAINERCLASS_POLICEMAN] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_RANGER_M] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_RANGER_F] = TRAINER_FEMALE,
+        [TRAINERCLASS_SCIENTIST] = TRAINER_MALE,
+        [TRAINERCLASS_SWIMMER_M] = TRAINER_MALE,
+        [TRAINERCLASS_SWIMMER_F] = TRAINER_FEMALE,
+        [TRAINERCLASS_TUBER_M] = TRAINER_MALE,
+        [TRAINERCLASS_TUBER_F] = TRAINER_FEMALE,
+        [TRAINERCLASS_SAILOR] = TRAINER_MALE,
+        [TRAINERCLASS_KIMONO_GIRL] = TRAINER_FEMALE,
+        [TRAINERCLASS_RUIN_MANIAC] = TRAINER_MALE,
+        [TRAINERCLASS_PSYCHIC_M] = TRAINER_MALE,
+        [TRAINERCLASS_PSYCHIC_F] = TRAINER_FEMALE,
+        [TRAINERCLASS_PI] = TRAINER_MALE,
+        [TRAINERCLASS_GUITARIST] = TRAINER_MALE,
+        [TRAINERCLASS_ACE_TRAINER_M_GS] = TRAINER_MALE,
+        [TRAINERCLASS_ACE_TRAINER_F_GS] = TRAINER_FEMALE,
+        [TRAINERCLASS_TEAM_ROCKET] = TRAINER_MALE,
+        [TRAINERCLASS_SKIER] = TRAINER_FEMALE,
+        [TRAINERCLASS_ROUGHNECK] = TRAINER_MALE,
+        [TRAINERCLASS_CLOWN] = TRAINER_MALE,
+        [TRAINERCLASS_WORKER] = TRAINER_MALE,
+        [TRAINERCLASS_SCHOOL_KID_M] = TRAINER_MALE,
+        [TRAINERCLASS_SCHOOL_KID_F] = TRAINER_FEMALE,
+        [TRAINERCLASS_TEAM_ROCKET_F] = TRAINER_FEMALE,
+        [TRAINERCLASS_BURGLAR] = TRAINER_MALE,
+        [TRAINERCLASS_FIREBREATHER] = TRAINER_MALE,
+        [TRAINERCLASS_BIKER] = TRAINER_MALE,
+        [TRAINERCLASS_LEADER_FALKNER] = TRAINER_MALE,
+        [TRAINERCLASS_LEADER_BUGSY] = TRAINER_FEMALE,
+        [TRAINERCLASS_POKE_MANIAC] = TRAINER_MALE,
+        [TRAINERCLASS_BIRD_KEEPER_GS] = TRAINER_MALE,
+        [TRAINERCLASS_LEADER_WHITNEY] = TRAINER_FEMALE,
+        [TRAINERCLASS_RANCHER] = TRAINER_MALE,
+        [TRAINERCLASS_LEADER_MORTY] = TRAINER_MALE,
+        [TRAINERCLASS_LEADER_PRYCE] = TRAINER_MALE,
+        [TRAINERCLASS_LEADER_JASMINE] = TRAINER_FEMALE,
+        [TRAINERCLASS_LEADER_CHUCK] = TRAINER_MALE,
+        [TRAINERCLASS_LEADER_CLAIR] = TRAINER_FEMALE,
+        [TRAINERCLASS_TEACHER] = TRAINER_FEMALE,
+        [TRAINERCLASS_SUPER_NERD] = TRAINER_MALE,
+        [TRAINERCLASS_SAGE] = TRAINER_MALE,
+        [TRAINERCLASS_PARASOL_LADY] = TRAINER_FEMALE,
+        [TRAINERCLASS_WAITER] = TRAINER_MALE,
+        [TRAINERCLASS_MEDIUM] = TRAINER_FEMALE,
+        [TRAINERCLASS_CAMERAMAN] = TRAINER_MALE,
+        [TRAINERCLASS_REPORTER] = TRAINER_FEMALE,
+        [TRAINERCLASS_IDOL] = TRAINER_FEMALE,
+        [TRAINERCLASS_CHAMPION] = TRAINER_MALE,
+        [TRAINERCLASS_ELITE_FOUR_WILL] = TRAINER_FEMALE,
+        [TRAINERCLASS_ELITE_FOUR_KAREN] = TRAINER_FEMALE,
+        [TRAINERCLASS_ELITE_FOUR_KOGA] = TRAINER_FEMALE,
+        [TRAINERCLASS_PKMN_TRAINER_CHERYL] = TRAINER_FEMALE,
+        [TRAINERCLASS_PKMN_TRAINER_RILEY] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_TRAINER_BUCK] = TRAINER_FEMALE,
+        [TRAINERCLASS_PKMN_TRAINER_MIRA] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_TRAINER_MARLEY] = TRAINER_FEMALE,
+        [TRAINERCLASS_PKMN_TRAINER_FTR_LUCAS] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_TRAINER_FTR_DAWN] = TRAINER_FEMALE,
+        [TRAINERCLASS_TOWER_TYCOON] = TRAINER_MALE,
+        [TRAINERCLASS_LEADER_BROCK] = TRAINER_MALE,
+        [TRAINERCLASS_HALL_MATRON] = TRAINER_FEMALE,
+        [TRAINERCLASS_FACTORY_HEAD] = TRAINER_MALE,
+        [TRAINERCLASS_ARCADE_STAR] = TRAINER_FEMALE,
+        [TRAINERCLASS_CASTLE_VALET] = TRAINER_MALE,
+        [TRAINERCLASS_LEADER_MISTY] = TRAINER_FEMALE,
+        [TRAINERCLASS_LEADER_LT_SURGE] = TRAINER_MALE,
+        [TRAINERCLASS_LEADER_ERIKA] = TRAINER_FEMALE,
+        [TRAINERCLASS_LEADER_JANINE] = TRAINER_FEMALE,
+        [TRAINERCLASS_LEADER_SABRINA] = TRAINER_FEMALE,
+        [TRAINERCLASS_LEADER_BLAINE] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_TRAINER_RED] = TRAINER_MALE,
+        [TRAINERCLASS_LEADER_BLUE] = TRAINER_MALE,
+        [TRAINERCLASS_ELDER] = TRAINER_MALE,
+        [TRAINERCLASS_ELITE_FOUR_BRUNO] = TRAINER_FEMALE,
+        [TRAINERCLASS_SCIENTIST_GS] = TRAINER_MALE,
+        [TRAINERCLASS_EXECUTIVE_ARIANA] = TRAINER_FEMALE,
+        [TRAINERCLASS_BOARDER] = TRAINER_MALE,
+        [TRAINERCLASS_EXECUTIVE_ARCHER] = TRAINER_MALE,
+        [TRAINERCLASS_EXECUTIVE_PROTON] = TRAINER_MALE,
+        [TRAINERCLASS_EXECUTIVE_PETREL] = TRAINER_MALE,
+        [TRAINERCLASS_PASSERBY] = TRAINER_MALE,
+        [TRAINERCLASS_MYSTERY_MAN] = TRAINER_MALE,
+        [TRAINERCLASS_DOUBLE_TEAM] = TRAINER_MALE,
+        [TRAINERCLASS_YOUNG_COUPLE] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_TRAINER_LANCE] = TRAINER_MALE,
+        [TRAINERCLASS_ROCKET_BOSS] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_TRAINER_LUCAS_DP] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_TRAINER_DAWN_DP] = TRAINER_FEMALE,
+        [TRAINERCLASS_PKMN_TRAINER_LUCAS_PT] = TRAINER_MALE,
+        [TRAINERCLASS_PKMN_TRAINER_DAWN_PT] = TRAINER_FEMALE,
+    };
+
+    TrainerGender LONG_CALL TT_TrainerTypeSexGet(int tr_type) {
+        return (TrainerGender)sTrainerGenders[tr_type];
+    }
+
+    // https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9714380
+    void LONG_CALL correct_zacian_zamazenta_kyurem_moves_for_form(struct PartyPokemon *param, unsigned int expected_form, int UNUSED *a3) {
+        switch (GetMonData(param, MON_DATA_SPECIES, NULL)) {
+            case SPECIES_KYUREM:
+                switch (expected_form) {
+                    case 0:
+                        SwapPartyPokemonMove(param, MOVE_ICE_BURN, MOVE_GLACIATE);
+                        SwapPartyPokemonMove(param, MOVE_FREEZE_SHOCK, MOVE_GLACIATE);
+                        SwapPartyPokemonMove(param, MOVE_FUSION_FLARE, MOVE_SCARY_FACE);
+                        SwapPartyPokemonMove(param, MOVE_FUSION_BOLT, MOVE_SCARY_FACE);
+                        break;
+                    case 1:
+                        SwapPartyPokemonMove(param, MOVE_GLACIATE, MOVE_ICE_BURN);
+                        SwapPartyPokemonMove(param, MOVE_SCARY_FACE, MOVE_FUSION_FLARE);
+                        break;
+                    case 2:
+                        SwapPartyPokemonMove(param, MOVE_GLACIATE, MOVE_FREEZE_SHOCK);
+                        SwapPartyPokemonMove(param, MOVE_SCARY_FACE, MOVE_FUSION_BOLT);
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
+            case SPECIES_ZACIAN:
+                switch (expected_form) {
+                    case 0:
+                        SwapPartyPokemonMove(param, MOVE_BEHEMOTH_BLADE, MOVE_IRON_HEAD);
+                        break;
+                    case 1:
+                        SwapPartyPokemonMove(param, MOVE_IRON_HEAD, MOVE_BEHEMOTH_BLADE);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case SPECIES_ZAMAZENTA:
+                switch (expected_form) {
+                    case 0:
+                        SwapPartyPokemonMove(param, MOVE_BEHEMOTH_BASH, MOVE_IRON_HEAD);
+                        break;
+                    case 1:
+                        SwapPartyPokemonMove(param, MOVE_IRON_HEAD, MOVE_BEHEMOTH_BASH);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
         }
     }
-    sys_FreeMemoryEz(levelUpLearnset);
-    return ret;
-}
 
-const u8 sTrainerGenders[] = {
-    [TRAINERCLASS_PKMN_TRAINER_ETHAN] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_TRAINER_LYRA] = TRAINER_FEMALE,
-    [TRAINERCLASS_YOUNGSTER] = TRAINER_MALE,
-    [TRAINERCLASS_LASS] = TRAINER_FEMALE,
-    [TRAINERCLASS_CAMPER] = TRAINER_MALE,
-    [TRAINERCLASS_PICNICKER] = TRAINER_FEMALE,
-    [TRAINERCLASS_BUG_CATCHER] = TRAINER_MALE,
-    [TRAINERCLASS_AROMA_LADY] = TRAINER_FEMALE,
-    [TRAINERCLASS_TWINS] = TRAINER_FEMALE,
-    [TRAINERCLASS_HIKER] = TRAINER_MALE,
-    [TRAINERCLASS_BATTLE_GIRL] = TRAINER_FEMALE,
-    [TRAINERCLASS_FISHERMAN] = TRAINER_MALE,
-    [TRAINERCLASS_CYCLIST_M] = TRAINER_MALE,
-    [TRAINERCLASS_CYCLIST_F] = TRAINER_FEMALE,
-    [TRAINERCLASS_BLACK_BELT] = TRAINER_MALE,
-    [TRAINERCLASS_ARTIST] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_BREEDER_M] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_BREEDER_F] = TRAINER_FEMALE,
-    [TRAINERCLASS_COWGIRL] = TRAINER_FEMALE,
-    [TRAINERCLASS_JOGGER] = TRAINER_MALE,
-    [TRAINERCLASS_POKEFAN_M] = TRAINER_MALE,
-    [TRAINERCLASS_POKEFAN] = TRAINER_FEMALE,
-    [TRAINERCLASS_POKE_KID] = TRAINER_FEMALE,
-    [TRAINERCLASS_RIVAL] = TRAINER_MALE,
-    [TRAINERCLASS_ACE_TRAINER_M] = TRAINER_MALE,
-    [TRAINERCLASS_ACE_TRAINER_F] = TRAINER_FEMALE,
-    [TRAINERCLASS_WAITRESS] = TRAINER_FEMALE,
-    [TRAINERCLASS_VETERAN] = TRAINER_MALE,
-    [TRAINERCLASS_NINJA_BOY] = TRAINER_MALE,
-    [TRAINERCLASS_DRAGON_TAMER] = TRAINER_MALE,
-    [TRAINERCLASS_BIRD_KEEPER] = TRAINER_FEMALE,
-    [TRAINERCLASS_JUGGLER] = TRAINER_MALE,
-    [TRAINERCLASS_RICH_BOY] = TRAINER_MALE,
-    [TRAINERCLASS_LADY] = TRAINER_FEMALE,
-    [TRAINERCLASS_GENTLEMAN] = TRAINER_MALE,
-    [TRAINERCLASS_SOCIALITE] = TRAINER_FEMALE,
-    [TRAINERCLASS_BEAUTY] = TRAINER_FEMALE,
-    [TRAINERCLASS_COLLECTOR] = TRAINER_MALE,
-    [TRAINERCLASS_POLICEMAN] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_RANGER_M] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_RANGER_F] = TRAINER_FEMALE,
-    [TRAINERCLASS_SCIENTIST] = TRAINER_MALE,
-    [TRAINERCLASS_SWIMMER_M] = TRAINER_MALE,
-    [TRAINERCLASS_SWIMMER_F] = TRAINER_FEMALE,
-    [TRAINERCLASS_TUBER_M] = TRAINER_MALE,
-    [TRAINERCLASS_TUBER_F] = TRAINER_FEMALE,
-    [TRAINERCLASS_SAILOR] = TRAINER_MALE,
-    [TRAINERCLASS_KIMONO_GIRL] = TRAINER_FEMALE,
-    [TRAINERCLASS_RUIN_MANIAC] = TRAINER_MALE,
-    [TRAINERCLASS_PSYCHIC_M] = TRAINER_MALE,
-    [TRAINERCLASS_PSYCHIC_F] = TRAINER_FEMALE,
-    [TRAINERCLASS_PI] = TRAINER_MALE,
-    [TRAINERCLASS_GUITARIST] = TRAINER_MALE,
-    [TRAINERCLASS_ACE_TRAINER_M_GS] = TRAINER_MALE,
-    [TRAINERCLASS_ACE_TRAINER_F_GS] = TRAINER_FEMALE,
-    [TRAINERCLASS_TEAM_ROCKET] = TRAINER_MALE,
-    [TRAINERCLASS_SKIER] = TRAINER_FEMALE,
-    [TRAINERCLASS_ROUGHNECK] = TRAINER_MALE,
-    [TRAINERCLASS_CLOWN] = TRAINER_MALE,
-    [TRAINERCLASS_WORKER] = TRAINER_MALE,
-    [TRAINERCLASS_SCHOOL_KID_M] = TRAINER_MALE,
-    [TRAINERCLASS_SCHOOL_KID_F] = TRAINER_FEMALE,
-    [TRAINERCLASS_TEAM_ROCKET_F] = TRAINER_FEMALE,
-    [TRAINERCLASS_BURGLAR] = TRAINER_MALE,
-    [TRAINERCLASS_FIREBREATHER] = TRAINER_MALE,
-    [TRAINERCLASS_BIKER] = TRAINER_MALE,
-    [TRAINERCLASS_LEADER_FALKNER] = TRAINER_MALE,
-    [TRAINERCLASS_LEADER_BUGSY] = TRAINER_FEMALE,
-    [TRAINERCLASS_POKE_MANIAC] = TRAINER_MALE,
-    [TRAINERCLASS_BIRD_KEEPER_GS] = TRAINER_MALE,
-    [TRAINERCLASS_LEADER_WHITNEY] = TRAINER_FEMALE,
-    [TRAINERCLASS_RANCHER] = TRAINER_MALE,
-    [TRAINERCLASS_LEADER_MORTY] = TRAINER_MALE,
-    [TRAINERCLASS_LEADER_PRYCE] = TRAINER_MALE,
-    [TRAINERCLASS_LEADER_JASMINE] = TRAINER_FEMALE,
-    [TRAINERCLASS_LEADER_CHUCK] = TRAINER_MALE,
-    [TRAINERCLASS_LEADER_CLAIR] = TRAINER_FEMALE,
-    [TRAINERCLASS_TEACHER] = TRAINER_FEMALE,
-    [TRAINERCLASS_SUPER_NERD] = TRAINER_MALE,
-    [TRAINERCLASS_SAGE] = TRAINER_MALE,
-    [TRAINERCLASS_PARASOL_LADY] = TRAINER_FEMALE,
-    [TRAINERCLASS_WAITER] = TRAINER_MALE,
-    [TRAINERCLASS_MEDIUM] = TRAINER_FEMALE,
-    [TRAINERCLASS_CAMERAMAN] = TRAINER_MALE,
-    [TRAINERCLASS_REPORTER] = TRAINER_FEMALE,
-    [TRAINERCLASS_IDOL] = TRAINER_FEMALE,
-    [TRAINERCLASS_CHAMPION] = TRAINER_MALE,
-    [TRAINERCLASS_ELITE_FOUR_WILL] = TRAINER_FEMALE,
-    [TRAINERCLASS_ELITE_FOUR_KAREN] = TRAINER_FEMALE,
-    [TRAINERCLASS_ELITE_FOUR_KOGA] = TRAINER_FEMALE,
-    [TRAINERCLASS_PKMN_TRAINER_CHERYL] = TRAINER_FEMALE,
-    [TRAINERCLASS_PKMN_TRAINER_RILEY] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_TRAINER_BUCK] = TRAINER_FEMALE,
-    [TRAINERCLASS_PKMN_TRAINER_MIRA] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_TRAINER_MARLEY] = TRAINER_FEMALE,
-    [TRAINERCLASS_PKMN_TRAINER_FTR_LUCAS] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_TRAINER_FTR_DAWN] = TRAINER_FEMALE,
-    [TRAINERCLASS_TOWER_TYCOON] = TRAINER_MALE,
-    [TRAINERCLASS_LEADER_BROCK] = TRAINER_MALE,
-    [TRAINERCLASS_HALL_MATRON] = TRAINER_FEMALE,
-    [TRAINERCLASS_FACTORY_HEAD] = TRAINER_MALE,
-    [TRAINERCLASS_ARCADE_STAR] = TRAINER_FEMALE,
-    [TRAINERCLASS_CASTLE_VALET] = TRAINER_MALE,
-    [TRAINERCLASS_LEADER_MISTY] = TRAINER_FEMALE,
-    [TRAINERCLASS_LEADER_LT_SURGE] = TRAINER_MALE,
-    [TRAINERCLASS_LEADER_ERIKA] = TRAINER_FEMALE,
-    [TRAINERCLASS_LEADER_JANINE] = TRAINER_FEMALE,
-    [TRAINERCLASS_LEADER_SABRINA] = TRAINER_FEMALE,
-    [TRAINERCLASS_LEADER_BLAINE] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_TRAINER_RED] = TRAINER_MALE,
-    [TRAINERCLASS_LEADER_BLUE] = TRAINER_MALE,
-    [TRAINERCLASS_ELDER] = TRAINER_MALE,
-    [TRAINERCLASS_ELITE_FOUR_BRUNO] = TRAINER_FEMALE,
-    [TRAINERCLASS_SCIENTIST_GS] = TRAINER_MALE,
-    [TRAINERCLASS_EXECUTIVE_ARIANA] = TRAINER_FEMALE,
-    [TRAINERCLASS_BOARDER] = TRAINER_MALE,
-    [TRAINERCLASS_EXECUTIVE_ARCHER] = TRAINER_MALE,
-    [TRAINERCLASS_EXECUTIVE_PROTON] = TRAINER_MALE,
-    [TRAINERCLASS_EXECUTIVE_PETREL] = TRAINER_MALE,
-    [TRAINERCLASS_PASSERBY] = TRAINER_MALE,
-    [TRAINERCLASS_MYSTERY_MAN] = TRAINER_MALE,
-    [TRAINERCLASS_DOUBLE_TEAM] = TRAINER_MALE,
-    [TRAINERCLASS_YOUNG_COUPLE] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_TRAINER_LANCE] = TRAINER_MALE,
-    [TRAINERCLASS_ROCKET_BOSS] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_TRAINER_LUCAS_DP] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_TRAINER_DAWN_DP] = TRAINER_FEMALE,
-    [TRAINERCLASS_PKMN_TRAINER_LUCAS_PT] = TRAINER_MALE,
-    [TRAINERCLASS_PKMN_TRAINER_DAWN_PT] = TRAINER_FEMALE,
-};
+    void LONG_CALL ChangeToBattleForm(struct PartyPokemon *pp) {
+        int monsNo = GetMonData(pp, MON_DATA_SPECIES, NULL);
+        int formNo = GetMonData(pp, MON_DATA_FORM, NULL);
 
-TrainerGender LONG_CALL TT_TrainerTypeSexGet(int tr_type) {
-    return (TrainerGender)sTrainerGenders[tr_type];
-}
+        RevertFormChange(pp, monsNo, formNo);
 
-// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9714380
-void LONG_CALL correct_zacian_zamazenta_kyurem_moves_for_form(struct PartyPokemon *param, unsigned int expected_form, int UNUSED *a3) {
-    switch (GetMonData(param, MON_DATA_SPECIES, NULL)) {
-        case SPECIES_KYUREM:
-            switch (expected_form) {
-                case 0:
-                    SwapPartyPokemonMove(param, MOVE_ICE_BURN, MOVE_GLACIATE);
-                    SwapPartyPokemonMove(param, MOVE_FREEZE_SHOCK, MOVE_GLACIATE);
-                    SwapPartyPokemonMove(param, MOVE_FUSION_FLARE, MOVE_SCARY_FACE);
-                    SwapPartyPokemonMove(param, MOVE_FUSION_BOLT, MOVE_SCARY_FACE);
-                    break;
-                case 1:
-                    SwapPartyPokemonMove(param, MOVE_GLACIATE, MOVE_ICE_BURN);
-                    SwapPartyPokemonMove(param, MOVE_SCARY_FACE, MOVE_FUSION_FLARE);
-                    break;
-                case 2:
-                    SwapPartyPokemonMove(param, MOVE_GLACIATE, MOVE_FREEZE_SHOCK);
-                    SwapPartyPokemonMove(param, MOVE_SCARY_FACE, MOVE_FUSION_BOLT);
-                    break;
-
-                default:
-                    break;
-            }
+        switch (monsNo) {
+        case SPECIES_XERNEAS:
+            formNo = 1;
+            ChangePartyPokemonToForm(pp, formNo);
             break;
         case SPECIES_ZACIAN:
-            switch (expected_form) {
-                case 0:
-                    SwapPartyPokemonMove(param, MOVE_BEHEMOTH_BLADE, MOVE_IRON_HEAD);
-                    break;
-                case 1:
-                    SwapPartyPokemonMove(param, MOVE_IRON_HEAD, MOVE_BEHEMOTH_BLADE);
-                    break;
-                default:
-                    break;
+            if (GetMonData(pp, MON_DATA_HELD_ITEM, NULL) == ITEM_RUSTED_SWORD) {
+                formNo = 1;
+                ChangePartyPokemonToForm(pp, formNo);
+                correct_zacian_zamazenta_kyurem_moves_for_form(pp, formNo, 0);
             }
             break;
         case SPECIES_ZAMAZENTA:
-            switch (expected_form) {
-                case 0:
-                    SwapPartyPokemonMove(param, MOVE_BEHEMOTH_BASH, MOVE_IRON_HEAD);
-                    break;
-                case 1:
-                    SwapPartyPokemonMove(param, MOVE_IRON_HEAD, MOVE_BEHEMOTH_BASH);
-                    break;
-                default:
-                    break;
+            if (GetMonData(pp, MON_DATA_HELD_ITEM, NULL) == ITEM_RUSTED_SHIELD) {
+                formNo = 1;
+                ChangePartyPokemonToForm(pp, formNo);
+                correct_zacian_zamazenta_kyurem_moves_for_form(pp, formNo, 0);
             }
             break;
+
         default:
             break;
-    }
-}
-
-void LONG_CALL ChangeToBattleForm(struct PartyPokemon *pp) {
-    int monsNo = GetMonData(pp, MON_DATA_SPECIES, NULL);
-    int formNo = GetMonData(pp, MON_DATA_FORM, NULL);
-
-    RevertFormChange(pp, monsNo, formNo);
-
-    switch (monsNo) {
-    case SPECIES_XERNEAS:
-        formNo = 1;
-        ChangePartyPokemonToForm(pp, formNo);
-        break;
-    case SPECIES_ZACIAN:
-        if (GetMonData(pp, MON_DATA_HELD_ITEM, NULL) == ITEM_RUSTED_SWORD) {
-            formNo = 1;
-            ChangePartyPokemonToForm(pp, formNo);
-            correct_zacian_zamazenta_kyurem_moves_for_form(pp, formNo, 0);
-        }
-        break;
-    case SPECIES_ZAMAZENTA:
-        if (GetMonData(pp, MON_DATA_HELD_ITEM, NULL) == ITEM_RUSTED_SHIELD) {
-            formNo = 1;
-            ChangePartyPokemonToForm(pp, formNo);
-            correct_zacian_zamazenta_kyurem_moves_for_form(pp, formNo, 0);
-        }
-        break;
-
-    default:
-        break;
-    }
-}
-
-/**
- * @brief checks if a given mon can learn a specific TM or HM by index. reads from data/generated/MachineMoveLearnsets.c
- * @see   pret/pokeheartgold GetMonTMHMCompat
- */
-BOOL GetMonMachineMoveCompat(struct PartyPokemon *pp, u16 machineMoveIndex) {
-    u32 species = GetMonData(pp, MON_DATA_SPECIES, NULL);
-    u16 form = GetMonData(pp, MON_DATA_FORM, NULL);
-
-    if (species > MAX_SPECIES_INCLUDING_FORMS || machineMoveIndex > NUM_MACHINE_MOVES) {
-        return FALSE;
-    }
-
-    u32 buf[MACHINE_LEARNSETS_BITFIELD_COUNT];
-    ArchiveDataLoadOfs(buf, ARC_CODE_ADDONS, CODE_ADDON_MACHINE_LEARNSETS, PokeOtherFormMonsNoGet(species, form) * MACHINE_LEARNSETS_BITFIELD_COUNT * sizeof(u32), MACHINE_LEARNSETS_BITFIELD_COUNT * sizeof(u32));
-
-    return (buf[machineMoveIndex / 32] >> (machineMoveIndex % 32)) & 1;
-}
-
-/**
- * @brief loads level up data for a mon. reads from data/generated/LevelupLearnsets.c
- */
-void LONG_CALL LoadLevelUpLearnset_HandleAlternateForm(int species, int form, u32 *levelUpLearnset) {
-    ArchiveDataLoadOfs(levelUpLearnset, ARC_LEVELUP_LEARNSETS, 0, PokeOtherFormMonsNoGet(species, form) * MAX_LEVELUP_MOVES * sizeof(u32), MAX_LEVELUP_MOVES * sizeof(u32));
-
-#ifdef BLOCK_LEARNING_UNIMPLEMENTED_MOVES
-    // shift moves to skip the unimplemented ones
-    int writeIndex = 0;
-    for (int readIndex = 0; readIndex < MAX_LEVELUP_MOVES; readIndex++) {
-        u32 entry = levelUpLearnset[readIndex];
-        u16 move = LEVEL_UP_LEARNSET_MOVE(entry);
-
-        if (move == LEVEL_UP_LEARNSET_END) {
-            levelUpLearnset[writeIndex] = entry;
-            break;
-        }
-
-        // keep the move
-        if (!IsMoveUnimplemented(move)) {
-            levelUpLearnset[writeIndex] = entry;
-            writeIndex++;
         }
     }
-#endif
-}
+
+    /**
+     * @brief checks if a given mon can learn a specific TM or HM by index. reads from data/generated/MachineMoveLearnsets.c
+     * @see   pret/pokeheartgold GetMonTMHMCompat
+     */
+    BOOL GetMonMachineMoveCompat(struct PartyPokemon *pp, u16 machineMoveIndex) {
+        u32 species = GetMonData(pp, MON_DATA_SPECIES, NULL);
+        u16 form = GetMonData(pp, MON_DATA_FORM, NULL);
+
+        if (species > MAX_SPECIES_INCLUDING_FORMS || machineMoveIndex > NUM_MACHINE_MOVES) {
+            return FALSE;
+        }
+
+        u32 buf[MACHINE_LEARNSETS_BITFIELD_COUNT];
+        ArchiveDataLoadOfs(buf, ARC_CODE_ADDONS, CODE_ADDON_MACHINE_LEARNSETS, PokeOtherFormMonsNoGet(species, form) * MACHINE_LEARNSETS_BITFIELD_COUNT * sizeof(u32), MACHINE_LEARNSETS_BITFIELD_COUNT * sizeof(u32));
+
+        return (buf[machineMoveIndex / 32] >> (machineMoveIndex % 32)) & 1;
+    }
+
+    /**
+     * @brief loads level up data for a mon. reads from data/generated/LevelupLearnsets.c
+     */
+    void LONG_CALL LoadLevelUpLearnset_HandleAlternateForm(int species, int form, u32 *levelUpLearnset) {
+        ArchiveDataLoadOfs(levelUpLearnset, ARC_LEVELUP_LEARNSETS, 0, PokeOtherFormMonsNoGet(species, form) * MAX_LEVELUP_MOVES * sizeof(u32), MAX_LEVELUP_MOVES * sizeof(u32));
+
+    #ifdef BLOCK_LEARNING_UNIMPLEMENTED_MOVES
+        // shift moves to skip the unimplemented ones
+        int writeIndex = 0;
+        for (int readIndex = 0; readIndex < MAX_LEVELUP_MOVES; readIndex++) {
+            u32 entry = levelUpLearnset[readIndex];
+            u16 move = LEVEL_UP_LEARNSET_MOVE(entry);
+
+            if (move == LEVEL_UP_LEARNSET_END) {
+                levelUpLearnset[writeIndex] = entry;
+                break;
+            }
+
+            // keep the move
+            if (!IsMoveUnimplemented(move)) {
+                levelUpLearnset[writeIndex] = entry;
+                writeIndex++;
+            }
+        }
+    #endif
+    }
