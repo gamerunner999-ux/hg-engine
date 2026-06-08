@@ -10066,7 +10066,7 @@ trainerdata 290, "Li"
     battletype SINGLE_BATTLE
     endentry
 
-    party 20
+    party 290
         // mon 0
         ivs 50
         abilityslot 0
@@ -10081,7 +10081,6 @@ trainerdata 290, "Li"
         setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
         setevs 0,0,0,0,0,0
         nature NATURE_JOLLY
-
         ballseal 0
 
         // mon 1
@@ -10115,7 +10114,6 @@ trainerdata 290, "Li"
         setevs 0,0,0,0,0,0
         nature NATURE_CALM
         ballseal 0
-
     endparty
 
 trainerdata 291, "Debbie"
