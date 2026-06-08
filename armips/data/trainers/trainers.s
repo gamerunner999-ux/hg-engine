@@ -1683,9 +1683,9 @@ trainerdata 49, "Albert"
     endparty
 
 trainerdata 50, "Abe"
-    trainermontype TRAINER_DATA_TYPE_NOTHING
+    trainermontype TRAINER_DATA_TYPE_ITEMS | TRAINER_DATA_TYPE_MOVES | TRAINER_DATA_TYPE_ABILITY | TRAINER_DATA_TYPE_IV_EV_SET | TRAINER_DATA_TYPE_NATURE_SET
     trainerclass TRAINERCLASS_BIRD_KEEPER_GS
-    nummons 1
+    nummons 3
     item ITEM_NONE
     item ITEM_NONE
     item ITEM_NONE
@@ -1698,10 +1698,54 @@ trainerdata 50, "Abe"
         // mon 0
         ivs 30
         abilityslot 0
-        level 9
-        pokemon SPECIES_SPEAROW
+        level 16
+        pokemon SPECIES_PRINPLUP
+        item ITEM_LEFTOVERS
+        move MOVE_WHIRLPOOL
+        move MOVE_PLUCK
+        move MOVE_FLIP_TURN
+        move MOVE_LIFE_DEW
+        ability ABILITY_TORRENT
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
+        nature NATURE_SASSY
         ballseal 0
+
+        // mon 1
+        ivs 30
+        abilityslot 0
+        level 17
+        monwithform SPECIES_SQUAWKABILLY, 2
+        item ITEM_MUSCLE_BAND
+        move MOVE_AERIAL_ACE
+        move MOVE_QUICK_ATTACK
+        move MOVE_PARTING_SHOT
+        move MOVE_COPYCAT
+        ability ABILITY_HUSTLE
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
+        nature NATURE_HASTY
+        ballseal 0
+
+        // mon 2
+        ivs 30
+        abilityslot 0
+        level 16
+        pokemon SPECIES_FARFETCHD_GALARIAN
+        item ITEM_SITRUS_BERRY
+        move MOVE_BRICK_BREAK
+        move MOVE_KNOCK_OFF
+        move MOVE_POWER_UP_PUNCH
+        move MOVE_COUNTER
+        ability ABILITY_SCRAPPY
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
+        nature NATURE_LONELY
+        ballseal 0
+
+
     endparty
+
 
 trainerdata 51, "Nico"
     trainermontype TRAINER_DATA_TYPE_NOTHING
@@ -1795,32 +1839,51 @@ trainerdata 53, "Jin"
     endparty
 
 trainerdata 54, "Troy"
-    trainermontype TRAINER_DATA_TYPE_NOTHING
+    trainermontype TRAINER_DATA_TYPE_ITEMS | TRAINER_DATA_TYPE_MOVES | TRAINER_DATA_TYPE_ABILITY | TRAINER_DATA_TYPE_IV_EV_SET | TRAINER_DATA_TYPE_NATURE_SET
     trainerclass TRAINERCLASS_SAGE
     nummons 2
     item ITEM_NONE
     item ITEM_NONE
     item ITEM_NONE
     item ITEM_NONE
-    aiflags F_PRIORITIZE_SUPER_EFFECTIVE | F_EVALUATE_ATTACKS | F_EXPERT_ATTACKS | 0
+    aiflags F_PRIORITIZE_SUPER_EFFECTIVE | F_EVALUATE_ATTACKS | 0
     battletype SINGLE_BATTLE
     endentry
 
     party 54
         // mon 0
-        ivs 0
+        ivs 50
         abilityslot 0
-        level 7
+        level 12
         pokemon SPECIES_BELLSPROUT
+        item ITEM_MIRACLE_SEED
+        move MOVE_GIGA_DRAIN
+        move MOVE_SLUDGE
+        move MOVE_STUN_SPORE
+        move MOVE_LEECH_SEED
+        ability ABILITY_INNARDS_OUT
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
+        nature NATURE_MILD
         ballseal 0
 
         // mon 1
-        ivs 0
-        abilityslot 32
-        level 7
-        pokemon SPECIES_HOOTHOOT
+        ivs 50
+        abilityslot 0
+        level 12
+        pokemon SPECIES_BELLSPROUT
+        item ITEM_POISON_BARB
+        move MOVE_CROSS_POISON
+        move MOVE_RAZOR_LEAF
+        move MOVE_SLEEP_POWDER
+        move MOVE_LEECH_SEED
+        ability ABILITY_INNARDS_OUT
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
+        nature NATURE_NAUGHTY
         ballseal 0
     endparty
+
 
 trainerdata 55, "Neal"
     trainermontype TRAINER_DATA_TYPE_NOTHING
