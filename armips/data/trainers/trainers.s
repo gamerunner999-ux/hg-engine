@@ -627,7 +627,7 @@ trainerdata 20, "Falkner"
         // mon 0
         ivs 50
         abilityslot 0
-        level 13
+        level 17
         pokemon SPECIES_GLIGAR
         item ITEM_ORAN_BERRY
         move MOVE_AERIAL_ACE
@@ -644,7 +644,7 @@ trainerdata 20, "Falkner"
         // mon 1
         ivs 50
         abilityslot 0
-        level 12
+        level 17
         pokemon SPECIES_NINJASK
         item ITEM_FOCUS_SASH
         move MOVE_U_TURN
@@ -660,7 +660,7 @@ trainerdata 20, "Falkner"
         // mon 2
         ivs 50
         abilityslot 0
-        level 13
+        level 18
         pokemon SPECIES_PIDGEOTTO
         item ITEM_EVIOLITE
         move MOVE_DUAL_WINGBEAT
@@ -676,7 +676,7 @@ trainerdata 20, "Falkner"
         // mon 3  
         ivs 50
         abilityslot 0
-        level 14
+        level 19
         monwithform SPECIES_ORICORIO, 3
         item ITEM_YACHE_BERRY
         move MOVE_OMINOUS_WIND
@@ -932,9 +932,9 @@ trainerdata 28, "Jake"
     endparty
 
 trainerdata 29, "Rod"
-    trainermontype TRAINER_DATA_TYPE_NOTHING
+    trainermontype TRAINER_DATA_TYPE_ITEMS | TRAINER_DATA_TYPE_MOVES | TRAINER_DATA_TYPE_ABILITY | TRAINER_DATA_TYPE_IV_EV_SET | TRAINER_DATA_TYPE_NATURE_SET
     trainerclass TRAINERCLASS_BIRD_KEEPER_GS
-    nummons 2
+    nummons 3
     item ITEM_NONE
     item ITEM_NONE
     item ITEM_NONE
@@ -947,16 +947,52 @@ trainerdata 29, "Rod"
         // mon 0
         ivs 30
         abilityslot 0
-        level 7
-        pokemon SPECIES_PIDGEY
+        level 17
+        pokemon SPECIES_PSYDUCK
+        item ITEM_EVIOLITE
+        move MOVE_BUBBLE_BEAM
+        move MOVE_ICY_WIND
+        move MOVE_CONFUSION
+        move MOVE_YAWN
+        ability ABILITY_OBLIVIOUS
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
+        nature NATURE_CALM
         ballseal 0
 
         // mon 1
         ivs 30
         abilityslot 0
-        level 7
-        pokemon SPECIES_PIDGEY
+        level 16
+        pokemon SPECIES_NOCTOWL
+        item ITEM_SHARP_BEAK
+        move MOVE_AIR_CUTTER
+        move MOVE_FACADE
+        move MOVE_HYPNOSIS
+        move MOVE_ROOST
+        ability ABILITY_TINTED_LENS
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
+        nature NATURE_NAIVE
         ballseal 0
+
+        // mon 2
+        ivs 30
+        abilityslot 0
+        level 16
+        pokemon SPECIES_COMBUSKEN
+        item ITEM_FOCUS_SASH
+        move MOVE_FLAME_BURST
+        move MOVE_ROLLING_KICK
+        move MOVE_WORK_UP
+        move MOVE_DETECT
+        ability ABILITY_SPEED_BOOST
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
+        nature NATURE_NAUGHTY
+        ballseal 0
+
+
     endparty
 
 trainerdata 30, "Whitney"
@@ -10019,38 +10055,67 @@ trainerdata 289, "Silver"
     endparty
 
 trainerdata 290, "Li"
-    trainermontype TRAINER_DATA_TYPE_NOTHING
+    trainermontype TRAINER_DATA_TYPE_ITEMS | TRAINER_DATA_TYPE_MOVES | TRAINER_DATA_TYPE_ABILITY | TRAINER_DATA_TYPE_IV_EV_SET | TRAINER_DATA_TYPE_NATURE_SET
     trainerclass TRAINERCLASS_ELDER
     nummons 3
     item ITEM_NONE
     item ITEM_NONE
     item ITEM_NONE
     item ITEM_NONE
-    aiflags F_PRIORITIZE_SUPER_EFFECTIVE | F_EXPERT_ATTACKS | 0
+    aiflags F_PRIORITIZE_SUPER_EFFECTIVE | F_EVALUATE_ATTACKS | 0
     battletype SINGLE_BATTLE
     endentry
 
-    party 290
+    party 20
         // mon 0
-        ivs 0
+        ivs 50
         abilityslot 0
-        level 7
-        pokemon SPECIES_BELLSPROUT
+        level 12
+        pokemon SPECIES_RATTATA
+        item ITEM_FOCUS_SASH
+        move MOVE_HYPER_FANG
+        move MOVE_QUICK_ATTACK
+        move MOVE_AERIAL_ACE
+        move MOVE_ENDEAVOR
+        ability ABILITY_HUSTLE
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
+        nature NATURE_JOLLY
+
         ballseal 0
 
         // mon 1
-        ivs 0
+        ivs 50
         abilityslot 0
-        level 7
-        pokemon SPECIES_BELLSPROUT
+        level 12
+        pokemon SPECIES_GASTLY
+        item ITEM_COLBUR_BERRY
+        move MOVE_OMINOUS_WIND
+        move MOVE_VENOSHOCK
+        move MOVE_POISON_GAS
+        move MOVE_MEMENTO
+        ability ABILITY_LEVITATE
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
+        nature NATURE_BOLD
         ballseal 0
 
         // mon 2
-        ivs 0
+        ivs 50
         abilityslot 0
-        level 10
-        pokemon SPECIES_HOOTHOOT
+        level 14
+        pokemon SPECIES_WEEPINBELL
+        item ITEM_BLACK_SLUDGE
+        move MOVE_MEGA_DRAIN
+        move MOVE_SLUDGE
+        move MOVE_STUN_SPORE
+        move MOVE_GROWTH
+        ability ABILITY_INNARDS_OUT
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
+        nature NATURE_CALM
         ballseal 0
+
     endparty
 
 trainerdata 291, "Debbie"
