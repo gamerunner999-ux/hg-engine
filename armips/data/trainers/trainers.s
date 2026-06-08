@@ -636,6 +636,7 @@ trainerdata 20, "Falkner"
         move MOVE_STEALTH_ROCK
         ability ABILITY_IMMUNITY
         setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
         nature NATURE_JOLLY
 
         ballseal 0
@@ -652,6 +653,7 @@ trainerdata 20, "Falkner"
         move MOVE_NONE
         ability ABILITY_SPEED_BOOST
         setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
         nature NATURE_QUIET
         ballseal 0
 
@@ -667,6 +669,7 @@ trainerdata 20, "Falkner"
         move MOVE_WHIRLWIND
         ability ABILITY_KEEN_EYE
         setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
         nature NATURE_MILD
         ballseal 0
 
@@ -682,6 +685,7 @@ trainerdata 20, "Falkner"
         move MOVE_ROOST
         ability ABILITY_DANCER
         setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        setevs 0,0,0,0,0,0
         nature NATURE_TIMID
         ballseal 0
     endparty
