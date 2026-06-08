@@ -252,22 +252,20 @@ typedef struct {
     /* 0x08 */ u8 movePP[4];
     /* 0x0C */ u8 movePpUps[4];
     /* 0x10 */ u32 hpIV:5, atkIV:5, defIV:5, spdIV:5, spatkIV:5, spdefIV:5, isEgg:1, isNicknamed:1;
-    // TODO: Finish HoennRibbonSet
-    /* 0x14 */ u32 ribbonFlags; // cool, ...
+    /* 0x14 */ u32 ribbonFlags;
     /* 0x18 */ u8 fatefulEncounter:1, gender:2, alternateForm:5;
     /* 0x19 */ u8 HGSS_shinyLeaves:6;
     /* 0x19 */ u8 unk_19_6:2;
-    /* 0x1A */ u16 Unused;
+    /* 0x1A */ u16 Unused;              // <- keep as plain u16
     /* 0x1C */ u16 Platinum_EggLocation;
     /* 0x1E */ u16 Platinum_MetLocation;
 } PokemonDataBlockB;
 
 typedef struct {
     /* 0x00 */ u16 nickname[11];
-    /* 0x16 */ u8 Unused;
+    /* 0x16 */ u8 Unused;               // <- keep as plain u8
     /* 0x17 */ u8 originGame;
-    // TODO: Finish SinnohRibbonSet2
-    /* 0x18 */ u64 sinnohRibbons2; // cool, ...
+    /* 0x18 */ u64 sinnohRibbons2;
 } PokemonDataBlockC;
 
 typedef struct {
@@ -279,11 +277,12 @@ typedef struct {
     /* 0x1A */ u8 pokerus;
     /* 0x1B */ u8 pokeball;
     /* 0x1C */ u8 metLevel:7;
-    u8 metGender:1;
+               u8 metGender:1;
     /* 0x1D */ u8 encounterType;
     /* 0x1E */ u8 HGSS_Pokeball;
-    /* 0x1F */ s8 mood;
+    /* 0x1F */ s8 mood;                 // <- 1 signed byte at 0x1F
 } PokemonDataBlockD;
+
 
 typedef union {
     PokemonDataBlockA blockA;
