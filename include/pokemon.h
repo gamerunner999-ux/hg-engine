@@ -346,6 +346,9 @@ typedef struct PartyOnlyPokemon {
     /* 0x09A */ u16 spdef;
     /* 0x09C */ MAIL mail;
     /* 0x0D4 */ CAPSULE sealCoords; // seal coords
+    /* 0x0EC */ u8 teraType;        // 0–18 (or 0–20 if including Stellar)
+    /* 0x0ED */ u8 teraActive;      // 0 = no, 1 = yes
+
 } PARTYONLYMON;
 
 struct PartyPokemon {
@@ -484,6 +487,8 @@ enum
     MON_DATA_NICKNAME_3,
     MON_DATA_NICKNAME_4,
     MON_DATA_UNK_121,
+    MON_DATA_TERA_TYPE,
+    MON_DATA_TERA_ACTIVE,
     MON_DATA_GAME_VERSION,
     MON_DATA_COOL_RIBBON,
     MON_DATA_COOL_RIBBON_GREAT,

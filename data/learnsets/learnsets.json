@@ -87239,7 +87239,7 @@
       },
       {
         "Level": 7,
-        "Move": "MOVE_WATER_GUN"
+        "Move": "MOVE_WATER_PULSE"
       },
       {
         "Level": 11,
@@ -87280,10 +87280,6 @@
       {
         "Level": 37,
         "Move": "MOVE_RETALIATE"
-      },
-      {
-        "Level": 41,
-        "Move": "MOVE_SWORDS_DANCE"
       },
       {
         "Level": 43,
@@ -87380,7 +87376,7 @@
       },
       {
         "Level": 1,
-        "Move": "MOVE_WATER_GUN"
+        "Move": "MOVE_WATER_PULSE"
       },
       {
         "Level": 1,
@@ -87421,10 +87417,6 @@
       {
         "Level": 45,
         "Move": "MOVE_RETALIATE"
-      },
-      {
-        "Level": 50,
-        "Move": "MOVE_SWORDS_DANCE"
       },
       {
         "Level": 53,
@@ -87475,7 +87467,6 @@
       "MOVE_SURF",
       "MOVE_SWAGGER",
       "MOVE_SWIFT",
-      "MOVE_SWORDS_DANCE",
       "MOVE_TAKE_DOWN",
       "MOVE_TAUNT",
       "MOVE_TERA_BLAST",
@@ -87486,7 +87477,6 @@
       "MOVE_WATER_PLEDGE",
       "MOVE_WATER_PULSE",
       "MOVE_WHIRLPOOL",
-      "MOVE_WORK_UP",
       "MOVE_X_SCISSOR"
     ],
     "EggMoves": [
@@ -87515,7 +87505,7 @@
     "LevelMoves": [
       {
         "Level": 0,
-        "Move": "MOVE_SLASH"
+        "Move": "MOVE_CUT"
       },
       {
         "Level": 1,
@@ -87523,7 +87513,7 @@
       },
       {
         "Level": 1,
-        "Move": "MOVE_TACKLE"
+        "Move": "MOVE_FLIP_TURN"
       },
       {
         "Level": 1,
@@ -87572,10 +87562,6 @@
       {
         "Level": 51,
         "Move": "MOVE_RETALIATE"
-      },
-      {
-        "Level": 58,
-        "Move": "MOVE_SWORDS_DANCE"
       },
       {
         "Level": 63,
@@ -119976,10 +119962,6 @@
         "Move": "MOVE_PLUCK"
       },
       {
-        "Level": 24,
-        "Move": "MOVE_NASTY_PLOT"
-      },
-      {
         "Level": 27,
         "Move": "MOVE_SUCKER_PUNCH"
       },
@@ -120056,7 +120038,6 @@
       "MOVE_WORK_UP"
     ],
     "EggMoves": [
-      "MOVE_DOUBLE_TEAM",
       "MOVE_CONFUSE_RAY",
       "MOVE_KNOCK_OFF",
       "MOVE_ROOST",
@@ -120113,10 +120094,6 @@
       {
         "Level": 25,
         "Move": "MOVE_PLUCK"
-      },
-      {
-        "Level": 30,
-        "Move": "MOVE_NASTY_PLOT"
       },
       {
         "Level": 35,
@@ -120196,7 +120173,6 @@
       "MOVE_WORK_UP"
     ],
     "EggMoves": [
-      "MOVE_DOUBLE_TEAM",
       "MOVE_CONFUSE_RAY",
       "MOVE_KNOCK_OFF",
       "MOVE_ROOST",
@@ -120273,10 +120249,6 @@
       {
         "Level": 25,
         "Move": "MOVE_PLUCK"
-      },
-      {
-        "Level": 30,
-        "Move": "MOVE_NASTY_PLOT"
       },
       {
         "Level": 37,
@@ -120387,7 +120359,6 @@
       "MOVE_WORK_UP"
     ],
     "EggMoves": [
-      "MOVE_DOUBLE_TEAM",
       "MOVE_CONFUSE_RAY",
       "MOVE_KNOCK_OFF",
       "MOVE_ROOST",
@@ -149967,7 +149938,7 @@
         "Move": "MOVE_BITE"
       },
       {
-        "Level": 15,
+        "Level": 14,
         "Move": "MOVE_INCINERATE"
       },
       {
@@ -150034,7 +150005,6 @@
       "MOVE_ZEN_HEADBUTT"
     ],
     "EggMoves": [
-      "MOVE_CURSE",
       "MOVE_ENCORE",
       "MOVE_SLACK_OFF",
       "MOVE_BELCH"
@@ -150138,7 +150108,6 @@
       "MOVE_ZEN_HEADBUTT"
     ],
     "EggMoves": [
-      "MOVE_CURSE",
       "MOVE_ENCORE",
       "MOVE_SLACK_OFF",
       "MOVE_BELCH"
@@ -150276,7 +150245,6 @@
     ],
     "EggMoves": [
       "MOVE_SING",
-      "MOVE_CURSE",
       "MOVE_ENCORE",
       "MOVE_SLACK_OFF",
       "MOVE_BELCH"

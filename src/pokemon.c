@@ -592,9 +592,33 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
         ret = TRUE;
         break;
     }
+    case MON_DATA_TERA_TYPE:
+    {
+        u16 val = *(u16*)data;
+        u16 tmp = GetBoxMonData(blocks, MON_DATA_RESERVED_114, NULL);
+        tmp &= ~0x001F;        // clear lower 5 bits
+        tmp |= (val & 0x1F);   // store tera type
+        SetBoxMonData(blocks, MON_DATA_RESERVED_114, &tmp);
+        ret = TRUE;
+        break;
+    }
+
+    case MON_DATA_TERA_ACTIVE:
+    {
+        u8 val = *(u8*)data;
+        u8 tmp = GetBoxMonData(blocks, MON_DATA_RESERVED_113, NULL);
+        if (val)
+            tmp |= 0x04;       // use bit 2 for Tera Active
+        else
+            tmp &= ~0x04;
+        SetBoxMonData(blocks, MON_DATA_RESERVED_113, &tmp);
+        ret = TRUE;
+        break;
+    }
     }
     return ret;
 }
+
 
 /**
  *  @brief edited fields in GetBoxMonData.  can add new fields here and edit existing ones
@@ -649,7 +673,20 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
         debug_printf("Current level returned: %d\n", ret);
 #endif
         break;
+    case MON_DATA_TERA_TYPE:
+    {
+        u16 tmp = GetBoxMonData(blocks, MON_DATA_RESERVED_114, NULL);
+        *retBool = TRUE;
+        return tmp & 0x1F;     // lower 5 bits
     }
+
+    case MON_DATA_TERA_ACTIVE:
+    {
+        u8 tmp = GetBoxMonData(blocks, MON_DATA_RESERVED_113, NULL);
+        *retBool = TRUE;
+        return (tmp >> 2) & 1; // bit 2
+    }
+
 #ifdef DEBUG_BOXMONDATA_EDITED_CASES
     //debug_printf("Modified GetBoxMonData called...\n    blocks %08X,\n    field %d,\n    data %08X,\n    retBool %08X\n", blocks, field, data, retBool);
 #endif

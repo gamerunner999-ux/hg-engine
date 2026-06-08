@@ -82,7 +82,7 @@ trainerdata 2, "Silver"
         ivs 0
         abilityslot 0
         level 5
-        pokemon SPECIES_CYNDAQUIL
+        pokemon SPECIES_FUECOCO
         ballseal 0
     endparty
 
@@ -103,7 +103,7 @@ trainerdata 3, "Silver"
         ivs 0
         abilityslot 0
         level 5
-        pokemon SPECIES_TOTODILE
+        pokemon SPECIES_OSHAWOTT
         ballseal 0
     endparty
 
@@ -612,7 +612,7 @@ trainerdata 19, "Mickey"
     endparty
 
 trainerdata 20, "Falkner"
-    trainermontype TRAINER_DATA_TYPE_ITEMS | TRAINER_DATA_TYPE_MOVES
+    trainermontype TRAINER_DATA_TYPE_ITEMS | TRAINER_DATA_TYPE_MOVES | TRAINER_DATA_TYPE_ABILITY | TRAINER_DATA_TYPE_IV_EV_SET | TRAINER_DATA_TYPE_NATURE_SET
     trainerclass TRAINERCLASS_LEADER_FALKNER
     nummons 4
     item ITEM_NONE
@@ -634,6 +634,10 @@ trainerdata 20, "Falkner"
         move MOVE_BULLDOZE
         move MOVE_WHIRLWIND
         move MOVE_STEALTH_ROCK
+        ability ABILITY_IMMUNITY
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        nature NATURE_JOLLY
+
         ballseal 0
 
         // mon 1
@@ -646,6 +650,9 @@ trainerdata 20, "Falkner"
         move MOVE_AERIAL_ACE
         move MOVE_DETECT
         move MOVE_NONE
+        ability ABILITY_SPEED_BOOST
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        nature NATURE_QUIET
         ballseal 0
 
         // mon 2
@@ -658,6 +665,9 @@ trainerdata 20, "Falkner"
         move MOVE_HYPER_VOICE
         move MOVE_MUD_SLAP
         move MOVE_WHIRLWIND
+        ability ABILITY_KEEN_EYE
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        nature NATURE_MILD
         ballseal 0
 
         // mon 3  
@@ -670,6 +680,9 @@ trainerdata 20, "Falkner"
         move MOVE_GUST
         move MOVE_TRAILBLAZE
         move MOVE_ROOST
+        ability ABILITY_DANCER
+        setivs 31, 31, 31, 31, 31, 31 // hp, atk, def, spd, spatk, spdef
+        nature NATURE_TIMID
         ballseal 0
     endparty
 
@@ -8807,7 +8820,7 @@ trainerdata 265, "Silver"
         ivs 0
         abilityslot 0
         level 5
-        pokemon SPECIES_CHIKORITA
+        pokemon SPECIES_ROWLET
         ballseal 0
     endparty
 
