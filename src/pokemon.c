@@ -595,10 +595,11 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
     case MON_DATA_TERA_TYPE:
     {
         u16 val = *(u16*)data;
-        u16 tmp = GetBoxMonData(blocks, MON_DATA_RESERVED_114, NULL);
-        tmp &= ~0x001F;        // clear lower 5 bits
-        tmp |= (val & 0x1F);   // store tera type
-        SetBoxMonData(blocks, MON_DATA_RESERVED_114, &tmp);
+        u16 tmp = blockA->sinnohRibbons >> 16;   // RESERVED_114 lives here
+        tmp &= ~0x001F;                          // clear lower 5 bits
+        tmp |= (val & 0x1F);                     // store tera type
+        blockA->sinnohRibbons &= 0x0000FFFF;     // clear upper half
+        blockA->sinnohRibbons |= (tmp << 16);    // write back
         ret = TRUE;
         break;
     }
@@ -606,15 +607,18 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
     case MON_DATA_TERA_ACTIVE:
     {
         u8 val = *(u8*)data;
-        u8 tmp = GetBoxMonData(blocks, MON_DATA_RESERVED_113, NULL);
+        u8 tmp = (blockA->sinnohRibbons >> 24);  // RESERVED_113 lives here
         if (val)
-            tmp |= 0x04;       // use bit 2 for Tera Active
+            tmp |= 0x04;
         else
             tmp &= ~0x04;
-        SetBoxMonData(blocks, MON_DATA_RESERVED_113, &tmp);
+        blockA->sinnohRibbons &= 0x00FFFFFF;
+        blockA->sinnohRibbons |= (tmp << 24);
         ret = TRUE;
         break;
     }
+
+
     }
     return ret;
 }
@@ -663,16 +667,19 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
         break;
     case MON_DATA_TERA_TYPE:
     {
-        u16 tmp = GetBoxMonData(blocks, MON_DATA_RESERVED_114, NULL);
+        u16 tmp = (blockA->sinnohRibbons >> 16);
         *retBool = TRUE;
-        return tmp & 0x1F;     // lower 5 bits
+        return tmp & 0x1F;
     }
+
     case MON_DATA_TERA_ACTIVE:
     {
-        u8 tmp = GetBoxMonData(blocks, MON_DATA_RESERVED_113, NULL);
+        u8 tmp = (blockA->sinnohRibbons >> 24);
         *retBool = TRUE;
-        return (tmp >> 2) & 1; // bit 2
+        return (tmp >> 2) & 1;
     }
+
+
     }
 
 #ifdef DEBUG_BOXMONDATA_EDITED_CASES
