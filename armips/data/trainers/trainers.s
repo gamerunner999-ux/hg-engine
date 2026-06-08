@@ -1731,7 +1731,7 @@ trainerdata 50, "Abe"
         ivs 30
         abilityslot 0
         level 16
-        monwithform SPECIES_FARFETCHD, 1"
+        monwithform SPECIES_FARFETCHD, 1
         item ITEM_SITRUS_BERRY
         move MOVE_BRICK_BREAK
         move MOVE_KNOCK_OFF
