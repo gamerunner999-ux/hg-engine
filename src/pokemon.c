@@ -545,7 +545,8 @@ struct BoxMonSubstructs {
     PokemonDataBlockD *blockD;
 };
 
-MyDebugInit();
+void Debug_PrintBlockSizes(void);
+
 
 /**
  *  @brief edited fields in SetBoxMonData.  can add new fields here and edit existing ones
@@ -563,6 +564,7 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
     PokemonDataBlockC *blockC = blocks->blockC;
     PokemonDataBlockD *blockD = blocks->blockD;
 
+    Debug_PrintBlockSizes();
 
     switch (field)
     {
