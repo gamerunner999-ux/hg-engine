@@ -262,11 +262,11 @@ typedef struct {
 } PokemonDataBlockB;
 
 typedef struct {
-    /* 0x00 */ u16 nickname[11];
-    /* 0x16 */ u8 Unused;               // <- keep as plain u8
+    /* 0x00 */ u16 nickname[11];   // 22 bytes
+    /* 0x16 */ u8 unused;          // padding / reserved
     /* 0x17 */ u8 originGame;
     /* 0x18 */ u64 sinnohRibbons2;
-} PokemonDataBlockC;
+} PokemonDataBlockC;              // size 0x20
 
 typedef struct {
     /* 0x00 */ u16 otTrainerName[8];
@@ -280,8 +280,8 @@ typedef struct {
                u8 metGender:1;
     /* 0x1D */ u8 encounterType;
     /* 0x1E */ u8 HGSS_Pokeball;
-    /* 0x1F */ s8 mood;                 // <- 1 signed byte at 0x1F
-} PokemonDataBlockD;
+    /* 0x1F */ u8 mood;            // plain byte
+} PokemonDataBlockD;              // size 0x20
 
 
 typedef union {
