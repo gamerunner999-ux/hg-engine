@@ -21,6 +21,8 @@
 #include "../include/constants/generated/learnsets.h"
 
 
+void Debug_PrintBlockSizes(void);
+
 extern u32 word_to_store_form_at;
 // [preevo] = {species, form}, [postevo] = {species, form},
 u16 ALIGN4 gEvolutionSceneOverride[2][2];
@@ -545,7 +547,7 @@ struct BoxMonSubstructs {
     PokemonDataBlockD *blockD;
 };
 
-void Debug_PrintBlockSizes(void);
+
 
 
 /**
