@@ -453,10 +453,11 @@ static inline unsigned int bit_to_num(unsigned int num) {
 		}
 	}
 }
-#ifdef DEBUG_DATA_BLOCK_SIZES
-        debug_printf("sizeof A=%u B=%u C=%u D=%u\n",
-             (unsigned)sizeof(PokemonDataBlockA),
-             (unsigned)sizeof(PokemonDataBlockB),
-             (unsigned)sizeof(PokemonDataBlockC),
-             (unsigned)sizeof(PokemonDataBlockD));
-#endif
+void MyDebugInit(void) {
+    debug_printf("sizeof A=%u B=%u C=%u D=%u\n",
+        (unsigned)sizeof(PokemonDataBlockA),
+        (unsigned)sizeof(PokemonDataBlockB),
+        (unsigned)sizeof(PokemonDataBlockC),
+        (unsigned)sizeof(PokemonDataBlockD));
+}
+
