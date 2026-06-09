@@ -265,7 +265,7 @@ typedef struct {
     /* 0x00 */ u16 nickname[11];   // 22 bytes
     /* 0x16 */ u8 unused;          // padding / reserved
     /* 0x17 */ u8 originGame;
-    /* 0x18 */ u64 sinnohRibbons2;
+    /* 0x18 */ u32 sinnohRibbons2;
 } PokemonDataBlockC;              // size 0x20
 
 typedef struct {

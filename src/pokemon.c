@@ -537,12 +537,13 @@ void LONG_CALL SetBoxMonAbility(struct BoxPokemon *boxmon) // actually takes box
     BoxMonSetFastModeOff(boxmon, fastMode);
 }
 
-struct BoxMonSubstructs {
-    PokemonDataBlockA *blockA;
-    PokemonDataBlockB *blockB;
-    PokemonDataBlockC *blockC;
-    PokemonDataBlockD *blockD;
-};
+typedef union {
+    PokemonDataBlockA blockA;
+    PokemonDataBlockB blockB;
+    PokemonDataBlockC blockC;
+    PokemonDataBlockD blockD;
+} PokemonDataBlock;
+
 
 /**
  *  @brief edited fields in SetBoxMonData.  can add new fields here and edit existing ones
