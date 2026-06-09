@@ -545,7 +545,7 @@ struct BoxMonSubstructs {
     PokemonDataBlockD *blockD;
 };
 
-
+MyDebugInit();
 
 /**
  *  @brief edited fields in SetBoxMonData.  can add new fields here and edit existing ones

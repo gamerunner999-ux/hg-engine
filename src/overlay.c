@@ -222,4 +222,3 @@ u32 LONG_CALL IsOverlayLoaded(u32 ovyId)
 
     return 0;
 }
-MyDebugInit();
