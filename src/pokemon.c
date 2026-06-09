@@ -544,6 +544,14 @@ struct BoxMonSubstructs {
     PokemonDataBlockC *blockC;
     PokemonDataBlockD *blockD;
 };
+#ifdef DEBUG_DATA_BLOCK_SIZES
+        debug_printf("sizeof A=%u B=%u C=%u D=%u\n",
+             (unsigned)sizeof(PokemonDataBlockA),
+             (unsigned)sizeof(PokemonDataBlockB),
+             (unsigned)sizeof(PokemonDataBlockC),
+             (unsigned)sizeof(PokemonDataBlockD));
+#endif
+
 
 
 /**
