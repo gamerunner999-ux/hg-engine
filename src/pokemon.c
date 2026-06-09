@@ -539,11 +539,12 @@ void LONG_CALL SetBoxMonAbility(struct BoxPokemon *boxmon) // actually takes box
 
 
 struct BoxMonSubstructs {
-    PokemonDataBlockA blockA;
-    PokemonDataBlockB blockB;
-    PokemonDataBlockC blockC;
-    PokemonDataBlockD blockD;
+    PokemonDataBlockA *blockA;
+    PokemonDataBlockB *blockB;
+    PokemonDataBlockC *blockC;
+    PokemonDataBlockD *blockD;
 };
+
 
 /**
  *  @brief edited fields in SetBoxMonData.  can add new fields here and edit existing ones
@@ -556,10 +557,11 @@ struct BoxMonSubstructs {
 BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *data)
 {
     u32 ret = FALSE;
-    PokemonDataBlockA *blockA = &blocks->blockA;
-    PokemonDataBlockB *blockB = &blocks->blockB;
-    PokemonDataBlockC *blockC = &blocks->blockC;
-    PokemonDataBlockD *blockD = &blocks->blockD;
+    PokemonDataBlockA *blockA = blocks->blockA;
+    PokemonDataBlockB *blockB = blocks->blockB;
+    PokemonDataBlockC *blockC = blocks->blockC;
+    PokemonDataBlockD *blockD = blocks->blockD;
+
 
     switch (field)
     {
@@ -648,10 +650,11 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
 {
     u32 ret = 0;
 
-    PokemonDataBlockA *blockA = &blocks->blockA;
-    PokemonDataBlockB *blockB = &blocks->blockB;
-    PokemonDataBlockC *blockC = &blocks->blockC;
-    PokemonDataBlockD *blockD = &blocks->blockD;
+    PokemonDataBlockA *blockA = blocks->blockA;
+    PokemonDataBlockB *blockB = blocks->blockB;
+    PokemonDataBlockC *blockC = blocks->blockC;
+    PokemonDataBlockD *blockD = blocks->blockD;
+
 
 
     *retBool = FALSE;
@@ -719,10 +722,11 @@ BOOL AddBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, int d
 #endif
     BOOL ret = FALSE;
 
-    PokemonDataBlockA *blockA = &blocks->blockA;
-    PokemonDataBlockB *blockB = &blocks->blockB;
-    PokemonDataBlockC *blockC = &blocks->blockC;
-    PokemonDataBlockD *blockD = &blocks->blockD;
+    PokemonDataBlockA *blockA = blocks->blockA;
+    PokemonDataBlockB *blockB = blocks->blockB;
+    PokemonDataBlockC *blockC = blocks->blockC;
+    PokemonDataBlockD *blockD = blocks->blockD;
+
 
 
     switch (field) {
