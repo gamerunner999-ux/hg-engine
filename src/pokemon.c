@@ -544,6 +544,12 @@ typedef union {
     PokemonDataBlockD blockD;
 } PokemonDataBlock;
 
+struct BoxMonSubstructs {
+    PokemonDataBlockA blockA;
+    PokemonDataBlockB blockB;
+    PokemonDataBlockC blockC;
+    PokemonDataBlockD blockD;
+};
 
 /**
  *  @brief edited fields in SetBoxMonData.  can add new fields here and edit existing ones
@@ -556,10 +562,11 @@ typedef union {
 BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *data)
 {
     u32 ret = FALSE;
-    PokemonDataBlockA *blockA = blocks->blockA;
-    PokemonDataBlockB *blockB UNUSED = blocks->blockB;
-    PokemonDataBlockC *blockC UNUSED = blocks->blockC;
-    PokemonDataBlockD *blockD = blocks->blockD;
+    PokemonDataBlockA *blockA = &blocks->blockA;
+    PokemonDataBlockB *blockB = &blocks->blockB;
+    PokemonDataBlockC *blockC = &blocks->blockC;
+    PokemonDataBlockD *blockD = &blocks->blockD;
+
     switch (field)
     {
     case MON_DATA_ABILITY:
@@ -647,10 +654,11 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
 {
     u32 ret = 0;
 
-    PokemonDataBlockA *blockA = blocks->blockA;
-    PokemonDataBlockB *blockB UNUSED = blocks->blockB;
-    PokemonDataBlockC *blockC UNUSED = blocks->blockC;
-    PokemonDataBlockD *blockD = blocks->blockD;
+    PokemonDataBlockA *blockA = &blocks->blockA;
+    PokemonDataBlockB *blockB = &blocks->blockB;
+    PokemonDataBlockC *blockC = &blocks->blockC;
+    PokemonDataBlockD *blockD = &blocks->blockD;
+
 
     *retBool = FALSE;
     switch (field)
@@ -717,10 +725,11 @@ BOOL AddBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, int d
 #endif
     BOOL ret = FALSE;
 
-    PokemonDataBlockA *blockA = blocks->blockA;
-    PokemonDataBlockB *blockB UNUSED = blocks->blockB;
-    PokemonDataBlockC *blockC UNUSED = blocks->blockC;
-    PokemonDataBlockD *blockD UNUSED = blocks->blockD;
+    PokemonDataBlockA *blockA = &blocks->blockA;
+    PokemonDataBlockB *blockB = &blocks->blockB;
+    PokemonDataBlockC *blockC = &blocks->blockC;
+    PokemonDataBlockD *blockD = &blocks->blockD;
+
 
     switch (field) {
     case MON_DATA_EXPERIENCE: {
