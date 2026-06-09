@@ -537,12 +537,6 @@ void LONG_CALL SetBoxMonAbility(struct BoxPokemon *boxmon) // actually takes box
     BoxMonSetFastModeOff(boxmon, fastMode);
 }
 
-typedef union {
-    PokemonDataBlockA blockA;
-    PokemonDataBlockB blockB;
-    PokemonDataBlockC blockC;
-    PokemonDataBlockD blockD;
-} PokemonDataBlock;
 
 struct BoxMonSubstructs {
     PokemonDataBlockA blockA;
