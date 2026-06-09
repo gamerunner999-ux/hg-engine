@@ -459,5 +459,4 @@ void MyDebugInit(void) {
         (unsigned)sizeof(PokemonDataBlockB),
         (unsigned)sizeof(PokemonDataBlockC),
         (unsigned)sizeof(PokemonDataBlockD));
-}
-
+	}
