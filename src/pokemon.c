@@ -21,7 +21,6 @@
 #include "../include/constants/generated/learnsets.h"
 
 
-void Debug_PrintBlockSizes(void);
 
 extern u32 word_to_store_form_at;
 // [preevo] = {species, form}, [postevo] = {species, form},
@@ -565,8 +564,6 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
     PokemonDataBlockB *blockB = blocks->blockB;
     PokemonDataBlockC *blockC = blocks->blockC;
     PokemonDataBlockD *blockD = blocks->blockD;
-
-    Debug_PrintBlockSizes();
 
     switch (field)
     {
