@@ -1147,7 +1147,7 @@ BOOL CheckTeraButton(struct BI_PARAM *bip, int tp_ret)
     bip->tp_ret = RECT_HIT_NONE;
     bip->obj_del = FALSE;
     newBS.ChangeBgFlag = 1;
-    int client_no = BattleWorkClientSetNoGet(bip->bw);
+    int client_no = BattleWorkClientNoGet(bip->bw, 0);
     newBS.needTera[client_no] = TERA_NEED;
     newBS.playerWantTera = TRUE;
 
