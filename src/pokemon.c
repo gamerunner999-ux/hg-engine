@@ -538,29 +538,48 @@ void LONG_CALL SetBoxMonAbility(struct BoxPokemon *boxmon) // actually takes box
     BoxMonSetFastModeOff(boxmon, fastMode);
 }
 
-BOOL SetBoxMonData_EditedCases(void *blocks, u32 field, void *data)
+
+struct BoxMonSubstructs {
+    PokemonDataBlockA *blockA;
+    PokemonDataBlockB *blockB;
+    PokemonDataBlockC *blockC;
+    PokemonDataBlockD *blockD;
+};
+
+
+
+/**
+ *  @brief edited fields in SetBoxMonData.  can add new fields here and edit existing ones
+ *
+ *  @param blocks unencrypted data blocks from BoxPokemon structure
+ *  @param field MON_DATA_* constant to set
+ *  @param data pointer to set data from
+ *  @return signal to the hook that it shouldn't return to vanilla handling
+ */
+BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *data)
 {
     u32 ret = FALSE;
-    u8 *raw = (u8 *)blocks;
-
-    PokemonDataBlockA *blockA = (PokemonDataBlockA *)(raw + 0x00);
-    PokemonDataBlockB *blockB = (PokemonDataBlockB *)(raw + 0x20);
-    PokemonDataBlockC *blockC = (PokemonDataBlockC *)(raw + 0x40);
-    PokemonDataBlockD *blockD = (PokemonDataBlockD *)(raw + 0x60);
+    PokemonDataBlockA *blockA = blocks->blockA;
+    PokemonDataBlockB *blockB = blocks->blockB;
+    PokemonDataBlockC *blockC = blocks->blockC;
+    PokemonDataBlockD *blockD = blocks->blockD;
 
     debug_printf("sizeof A=%u B=%u C=%u D=%u\n",
-        (unsigned)sizeof(PokemonDataBlockA),
-        (unsigned)sizeof(PokemonDataBlockB),
-        (unsigned)sizeof(PokemonDataBlockC),
-        (unsigned)sizeof(PokemonDataBlockD));
+    (unsigned)sizeof(PokemonDataBlockA),
+    (unsigned)sizeof(PokemonDataBlockB),
+    (unsigned)sizeof(PokemonDataBlockC),
+    (unsigned)sizeof(PokemonDataBlockD));
 
     switch (field)
     {
     case MON_DATA_ABILITY:
     {
         u16 ability = *((u16 *)data);
-        blockA->ability    = ability & 0xFF;
+        blockA->ability = ability & 0xFF;
         blockA->abilityMSB = (ability >> 8) & 0x01;
+#ifdef DEBUG_BOXMONDATA_EDITED_CASES
+        debug_printf("[SetBoxMonData] Ability to set %d, LSB %d, MSb %d\n", ability, blockA->ability, blockA->abilityMSB);
+#endif
         ret = TRUE;
         break;
     }
@@ -568,6 +587,9 @@ BOOL SetBoxMonData_EditedCases(void *blocks, u32 field, void *data)
     {
         u32 experience = *((u32 *)data);
         blockA->exp = experience;
+#ifdef DEBUG_BOXMONDATA_EDITED_CASES
+        debug_printf("[SetBoxMonData] Experience to set %d\n", blockA->exp);
+#endif
         ret = TRUE;
         break;
     }
@@ -575,12 +597,16 @@ BOOL SetBoxMonData_EditedCases(void *blocks, u32 field, void *data)
     {
         u8 metLevel = *((u8 *)data);
         blockD->metLevel = metLevel;
+#ifdef DEBUG_BOXMONDATA_EDITED_CASES
+        debug_printf("[SetBoxMonData] metLevel to set %d\n", blockD->metLevel);
+#endif
         ret = TRUE;
         break;
     }
+    
     case MON_DATA_TERA_TYPE:
     {
-        u16 val = *(u16 *)data;
+        u16 val = *(u16*)data;
 
         u32 sr = blockA->sinnohRibbons;
         u16 reserved114 = (sr >> 16) & 0xFFFF;
@@ -594,7 +620,7 @@ BOOL SetBoxMonData_EditedCases(void *blocks, u32 field, void *data)
     }
     case MON_DATA_TERA_ACTIVE:
     {
-        u8 val = *(u8 *)data;
+        u8 val = *(u8*)data;
 
         u32 sr = blockA->sinnohRibbons;
         u8 reserved113 = (sr >> 24) & 0xFF;
@@ -608,46 +634,57 @@ BOOL SetBoxMonData_EditedCases(void *blocks, u32 field, void *data)
         ret = TRUE;
         break;
     }
-    }
 
+
+
+    }
     return ret;
 }
 
 
-u32 GetBoxMonData_EditedCases(void *blocks, u32 field, void *data UNUSED, BOOL *retBool)
+/**
+ *  @brief edited fields in GetBoxMonData.  can add new fields here and edit existing ones
+ *
+ *  @param blocks unencrypted data blocks from BoxPokemon structure
+ *  @param field MON_DATA_* constant to retrieve
+ *  @param data pointer to return data in (if necessary as a structure)
+ *  @param retBool pointer to signal to the hook that it shouldn't return to vanilla handling
+ *  @return result of GetBoxMonData if one of these fields applies and return data is containable in variable
+ */
+u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *data UNUSED, BOOL *retBool)
 {
-    u8 *raw = (u8 *)blocks;
-
-    PokemonDataBlockA *blockA = (PokemonDataBlockA *)(raw + 0x00);
-    PokemonDataBlockB *blockB = (PokemonDataBlockB *)(raw + 0x20);
-    PokemonDataBlockC *blockC = (PokemonDataBlockC *)(raw + 0x40);
-    PokemonDataBlockD *blockD = (PokemonDataBlockD *)(raw + 0x60);
-
     u32 ret = 0;
-    *retBool = FALSE;
 
+    PokemonDataBlockA *blockA = blocks->blockA;
+    PokemonDataBlockB *blockB = blocks->blockB;
+    PokemonDataBlockC *blockC = blocks->blockC;
+    PokemonDataBlockD *blockD = blocks->blockD;
+
+
+
+    *retBool = FALSE;
     switch (field)
     {
     case MON_DATA_ABILITY:
-        ret = (blockA->abilityMSB << 8) | blockA->ability;
+    {
+        ret = (blockA->abilityMSB << 8) | (blockA->ability);
         *retBool = TRUE;
         break;
-
+    }
     case MON_DATA_EXPERIENCE:
+    {
         ret = blockA->exp;
         *retBool = TRUE;
         break;
-
+    }
     case MON_DATA_MET_LEVEL:
         ret = blockD->metLevel;
         *retBool = TRUE;
         break;
-
     case MON_DATA_LEVEL:
         ret = CalcLevelBySpeciesAndExp(blockA->species, blockA->exp);
         *retBool = TRUE;
         break;
-
     case MON_DATA_TERA_TYPE:
     {
         u32 sr = blockA->sinnohRibbons;
@@ -665,50 +702,64 @@ u32 GetBoxMonData_EditedCases(void *blocks, u32 field, void *data UNUSED, BOOL *
     }
     }
 
+#ifdef DEBUG_BOXMONDATA_EDITED_CASES
+    //debug_printf("Modified GetBoxMonData called...\n    blocks %08X,\n    field %d,\n    data %08X,\n    retBool %08X\n", blocks, field, data, retBool);
+#endif
     return ret;
 }
 
 
-BOOL AddBoxMonData_EditedCases(void *blocks, u32 field, int data)
+/**
+ *  @brief edited fields in AddBoxMonData.  can add new fields here and edit existing ones
+ *
+ *  @param blocks unencrypted data blocks from BoxPokemon structure
+ *  @param field MON_DATA_* constant to retrieve
+ *  @param data value to return data in (if necessary as a structure)
+ *  @return signal to the hook that it shouldn't return to vanilla handling
+ */
+BOOL AddBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, int data)
 {
-    u8 *raw = (u8 *)blocks;
-
-    PokemonDataBlockA *blockA = (PokemonDataBlockA *)(raw + 0x00);
-    PokemonDataBlockB *blockB = (PokemonDataBlockB *)(raw + 0x20);
-    PokemonDataBlockC *blockC = (PokemonDataBlockC *)(raw + 0x40);
-    PokemonDataBlockD *blockD = (PokemonDataBlockD *)(raw + 0x60);
-
+#ifdef DEBUG_BOXMONDATA_EDITED_CASES
+    debug_printf("Modified AddBoxMonData called... field=%d data=%d\n", field, data);
+#endif
     BOOL ret = FALSE;
 
-    switch (field)
-    {
-    case MON_DATA_EXPERIENCE:
-    {
+    PokemonDataBlockA *blockA = blocks->blockA;
+    PokemonDataBlockB *blockB = blocks->blockB;
+    PokemonDataBlockC *blockC = blocks->blockC;
+    PokemonDataBlockD *blockD = blocks->blockD;
+
+
+
+    switch (field) {
+    case MON_DATA_EXPERIENCE: {
         u32 experience = (u32)data;
-        u32 maxExp = PokeLevelExpGet(blockA->species, 100);
-
-        if (blockA->exp + experience > maxExp)
-            blockA->exp = maxExp;
-        else
+        if (blockA->exp + experience > PokeLevelExpGet(blockA->species, 100)) {
+            blockA->exp = PokeLevelExpGet(blockA->species, 100);
+        } else {
             blockA->exp += experience;
-
+        }
         ret = TRUE;
+#ifdef DEBUG_BOXMONDATA_EDITED_CASES
+        debug_printf("[AddBoxMonData] Experience to add %d, new experience %d\n", experience, blockA->exp);
+#endif
         break;
     }
 
-    case MON_DATA_ABILITY:
-    {
+    case MON_DATA_ABILITY: {
         u16 ability = (u16)data;
-        blockA->ability    = ability & 0xFF;
-        blockA->abilityMSB = (ability >> 8) & 0x01;
+        blockA->ability     = ability & 0xFF;
+        blockA->abilityMSB  = (ability >> 8) & 0x01;
         ret = TRUE;
+#ifdef DEBUG_BOXMONDATA_EDITED_CASES
+        debug_printf("[AddBoxMonData] Ability to set %d, LSB %d, MSb %d\n", ability, blockA->ability, blockA->abilityMSB);
+#endif
         break;
     }
     }
 
     return ret;
 }
-
 
 /**
  *  @brief get species base experience, modified for form.  base experience is no longer in personal
