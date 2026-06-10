@@ -16,6 +16,8 @@
 #include "../../include/overlay.h"
 
 static BOOL MegaEvolutionOrUltraBurst(struct BattleSystem *bsys, struct BattleStruct *ctx);
+void TerastallizeBattler(struct BattleStruct *ctx, int client_no);
+
 
 /********************************************************************************************************************/
 /********************************************************************************************************************/
