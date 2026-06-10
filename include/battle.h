@@ -1819,21 +1819,20 @@ struct PACKED newBattleStruct
     u8 ChangeBgFlag:4;
     u8 CanMega:4;
 
-// --- Terastallization Tracking ---
-    u8 SideTera[4];          // <--- ADD THIS: Tracks if a specific client has Terastallized
-    u8 needTera[4];          // <--- ADD THIS: Action queue tracking for Terastallization this turn
-    u8 playerWantTera;       // Tracks if player has toggled the UI button this turn
-    u8 PlayerTeraed;         // Backwards compatibility flag for player side
-    u8 TeraIconLight;        // UI toggle state indicator
-    u8 CanTera;              // Eligibility indicator flag
-
     CATS_ACT_PTR MegaOAM;
     CATS_ACT_PTR MegaButton;
-    CATS_ACT_PTR TeraOAM;       // Graphics handle for the combat menu icon
-    CATS_ACT_PTR TeraButton;    // Touch target handle for the interactive button
     CATS_ACT_PTR WeatherOAM;
     SysTask *weatherUpdateTask;
 
+    // --- Terastallization Tracking (APPEND ONLY) ---
+    u8 SideTera[4];
+    u8 needTera[4];
+    u8 playerWantTera;
+    u8 PlayerTeraed;
+    u8 TeraIconLight;
+    u8 CanTera;
+    CATS_ACT_PTR TeraOAM;
+    CATS_ACT_PTR TeraButton;
 #ifdef RESTORE_ITEMS_AT_BATTLE_END
     u16 itemsToRestore[6]; // items that each mon was holding at the beginning of the battle
 #endif // RESTORE_ITEMS_AT_BATTLE_END
