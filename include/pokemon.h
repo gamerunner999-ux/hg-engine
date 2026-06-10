@@ -262,11 +262,11 @@ typedef struct {
 } PokemonDataBlockB;
 
 typedef struct {
-    /* 0x00 */ u16 nickname[11];   // 22 bytes
-    /* 0x16 */ u8 unused;          // 1
-    /* 0x17 */ u8 originGame;      // 1
-    /* 0x18 */ u32 sinnohRibbons2; // 4
-    /* 0x1C */ u8 padding[4];      // <-- force struct to 32 bytes
+    /* 0x00 */ u16 nickname[11];
+    /* 0x16 */ u8 Unused;
+    /* 0x17 */ u8 originGame;
+    // TODO: Finish SinnohRibbonSet2
+    /* 0x18 */ u64 sinnohRibbons2; // cool, ...
 } PokemonDataBlockC;
 
 typedef struct {
