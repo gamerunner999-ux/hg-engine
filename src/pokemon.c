@@ -564,11 +564,12 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
     PokemonDataBlockC *blockC = blocks->blockC;
     PokemonDataBlockD *blockD = blocks->blockD;
 
-    debug_printf("sizeof A=%u B=%u C=%u D=%u\n",
+    debug_printf("sizeof A=%u B=%u C=%u D=%u union=%u\n",
     (unsigned)sizeof(PokemonDataBlockA),
     (unsigned)sizeof(PokemonDataBlockB),
     (unsigned)sizeof(PokemonDataBlockC),
-    (unsigned)sizeof(PokemonDataBlockD));
+    (unsigned)sizeof(PokemonDataBlockD),
+    (unsigned)sizeof(PokemonDataBlock));
 
     switch (field)
     {
