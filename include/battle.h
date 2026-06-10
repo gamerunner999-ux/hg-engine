@@ -1803,8 +1803,11 @@ enum
 };
 
 #define MEGA_NEED 1
-#define MEGA_CHECK_APPER 2
+#define MEGA_CHECK_APPEAR 2
 #define MEGA_NO_NEED 0
+#define TERA_NEED 1
+#define TERA_CHECK_APPEAR 2
+#define TERA_NO_NEED 0
 
 struct PACKED newBattleStruct
 {

@@ -411,6 +411,28 @@ static BOOL MegaEvolutionOrUltraBurst(struct BattleSystem *bsys, struct BattleSt
     client_set_max = BattleWorkClientSetMaxGet(bsys);
     for (i = 0; i < client_set_max; i++) {
         client_no = ctx->turnOrder[i];
+        // --- Terastallization Activation ---
+        if (newBS.needTera[client_no] == TERA_NEED && ctx->battlemon[client_no].hp)
+        {
+            // Apply Tera transformation
+            TerastallizeBattler(ctx, client_no);
+
+            // Mark Tera as processed
+            newBS.needTera[client_no] = TERA_CHECK_APPEAR;
+            newBS.SideTera[client_no] = TRUE;
+            newBS.PlayerTeraed = TRUE;
+
+            // (Optional) Load Tera animation script later
+            // LoadBattleSubSeqScript(ctx, ARC_BATTLE_SUB_SEQ, SUB_SEQ_HANDLE_TERASTALLIZATION);
+
+            // Force script execution
+            ctx->battlerIdTemp = client_no;
+            ctx->next_server_seq_no = ctx->server_seq_no;
+            ctx->server_seq_no = CONTROLLER_COMMAND_RUN_SCRIPT;
+            return TRUE;
+        }
+
+
         if (newBS.needMega[client_no] == MEGA_NEED && ctx->battlemon[client_no].hp) {
             if (BattleTypeGet(bsys) & BATTLE_TYPE_MULTI) {
                 if (client_no == 0 || (client_no == 2 && ctx->battlemon[client_no].id_no == ctx->battlemon[0].id_no))
@@ -426,7 +448,7 @@ static BOOL MegaEvolutionOrUltraBurst(struct BattleSystem *bsys, struct BattleSt
 
             BattleFormChange(client_no, ctx->battlemon[client_no].form_no, bsys, ctx, TRUE);
 
-            newBS.needMega[client_no] = MEGA_CHECK_APPER;
+            newBS.needMega[client_no] = MEGA_CHECK_APPEAR;
             ctx->battlerIdTemp = client_no;
             if (CheckCanSpeciesMegaEvolveByMove(ctx, client_no)) {
                 LoadBattleSubSeqScript(ctx, ARC_BATTLE_SUB_SEQ, SUB_SEQ_HANDLE_MOVE_MEGA_EVOLUTION);
@@ -437,7 +459,7 @@ static BOOL MegaEvolutionOrUltraBurst(struct BattleSystem *bsys, struct BattleSt
             ctx->server_seq_no = CONTROLLER_COMMAND_RUN_SCRIPT;
             return TRUE;
         }
-        if (newBS.needMega[client_no] == MEGA_CHECK_APPER && ctx->battlemon[client_no].hp) {
+        if (newBS.needMega[client_no] == MEGA_CHECK_APPEAR && ctx->battlemon[client_no].hp) {
             newBS.needMega[client_no] = MEGA_NO_NEED;
 
             LoadBattleSubSeqScript(ctx, ARC_BATTLE_SUB_SEQ, SUB_SEQ_SWITCH_IN_ABILITY_CHECK);

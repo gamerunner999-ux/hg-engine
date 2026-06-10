@@ -105,7 +105,7 @@ void LONG_CALL BattleControllerPlayer_GetBattleMon(struct BattleSystem *battleSy
     int battlerId;
     int maxBattlers = BattleWorkClientSetMaxGet(battleSystem);
 
-    for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
+        for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
         BattleSystem_GetBattleMon(battleSystem, ctx, battlerId, ctx->sel_mons_no[battlerId]);
         // TODO remove partySize check when we implement new battle types in IsBattlerSlotValid
         if (!IsBattlerSlotValid(battleSystem, battlerId) || ctx->sel_mons_no[battlerId] >= BattleWorkPokeCountGet(battleSystem, battlerId)) {
@@ -115,8 +115,15 @@ void LONG_CALL BattleControllerPlayer_GetBattleMon(struct BattleSystem *battleSy
             ctx->no_reshuffle_client |= No2Bit(battlerId);
         } else {
             BattleSystem_GetBattleMon(battleSystem, ctx, battlerId, ctx->sel_mons_no[battlerId]);
+            struct BattlePokemon *bp = &ctx->battlemon[battlerId];
+            struct Party *party = BattleWorkPokePartyGet(battleSystem, battlerId);
+            struct PartyPokemon *mon = Party_GetMonByIndex(party, ctx->sel_mons_no[battlerId]);
+
+            bp->tera_type = GetMonData(mon, MON_DATA_TERA_TYPE, NULL);
+            bp->is_currently_terastallized = 0;
         }
     }
+
 
     ctx->hp_temp = ctx->battlemon[1].hp;
     ctx->server_seq_no = CONTROLLER_COMMAND_START_ENCOUNTER;
@@ -262,5 +269,18 @@ void LONG_CALL ov12_0224DD74(struct BattleSystem *bsys UNUSED, struct BattleStru
                 ctx->lastClientDamagedBy[ctx->defence_client] = BATTLER_NONE;
             }
         }
+    }
+}
+void TerastallizeBattler(struct BattleStruct *ctx, u8 battlerId)
+{
+    struct BattlePokemon *bp = &ctx->battlemon[battlerId];
+
+    if (!bp->is_currently_terastallized)
+    {
+        bp->is_currently_terastallized = 1;
+
+        // Apply Tera type
+        bp->type1 = bp->tera_type;
+        bp->type2 = bp->tera_type;
     }
 }
