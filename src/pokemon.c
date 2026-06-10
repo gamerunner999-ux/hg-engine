@@ -604,6 +604,37 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
         ret = TRUE;
         break;
     }
+    case MON_DATA_TERA_TYPE:
+{
+    u8 val = *(u8*)data & 0x1F;
+
+    u32 sr = blockA->sinnohRibbons;
+    // clear high 8 bits
+    sr &= 0x00FFFFFF;
+    // set teraType in bits 24–28 (or just whole byte 24–31 if you don’t care)
+    sr |= ((u32)val) << 24;
+
+    blockA->sinnohRibbons = sr;
+    ret = TRUE;
+    break;
+}
+
+case MON_DATA_TERA_ACTIVE:
+{
+    u8 val = *(u8*)data ? 1 : 0;
+
+    u32 sr = blockA->sinnohRibbons;
+    // use one bit in the same high byte, e.g. bit 5
+    if (val)
+        sr |= (1u << 29);
+    else
+        sr &= ~(1u << 29);
+
+    blockA->sinnohRibbons = sr;
+    ret = TRUE;
+    break;
+}
+
     /*
     case MON_DATA_TERA_TYPE:
     {
@@ -686,6 +717,37 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
         ret = CalcLevelBySpeciesAndExp(blockA->species, blockA->exp);
         *retBool = TRUE;
         break;
+    case MON_DATA_TERA_TYPE:
+{
+    u8 val = *(u8*)data & 0x1F;
+
+    u32 sr = blockA->sinnohRibbons;
+    // clear high 8 bits
+    sr &= 0x00FFFFFF;
+    // set teraType in bits 24–28 (or just whole byte 24–31 if you don’t care)
+    sr |= ((u32)val) << 24;
+
+    blockA->sinnohRibbons = sr;
+    ret = TRUE;
+    break;
+}
+
+case MON_DATA_TERA_ACTIVE:
+{
+    u8 val = *(u8*)data ? 1 : 0;
+
+    u32 sr = blockA->sinnohRibbons;
+    // use one bit in the same high byte, e.g. bit 5
+    if (val)
+        sr |= (1u << 29);
+    else
+        sr &= ~(1u << 29);
+
+    blockA->sinnohRibbons = sr;
+    ret = TRUE;
+    break;
+}
+
     /*
     case MON_DATA_TERA_TYPE:
     {
