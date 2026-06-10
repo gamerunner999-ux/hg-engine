@@ -604,7 +604,7 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
         ret = TRUE;
         break;
     }
-    
+    /*
     case MON_DATA_TERA_TYPE:
     {
         u16 val = *(u16*)data;
@@ -635,7 +635,7 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
         ret = TRUE;
         break;
     }
-
+*/
 
 
     }
@@ -686,6 +686,7 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
         ret = CalcLevelBySpeciesAndExp(blockA->species, blockA->exp);
         *retBool = TRUE;
         break;
+    /*
     case MON_DATA_TERA_TYPE:
     {
         u32 sr = blockA->sinnohRibbons;
@@ -701,6 +702,7 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
         *retBool = TRUE;
         return (reserved113 >> 2) & 1;
     }
+    */
     }
 
 #ifdef DEBUG_BOXMONDATA_EDITED_CASES
