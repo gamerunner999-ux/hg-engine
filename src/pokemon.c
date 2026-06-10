@@ -604,36 +604,34 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
         ret = TRUE;
         break;
     }
-    case MON_DATA_TERA_TYPE:
+case MON_DATA_TERA_TYPE:
 {
-    u8 val = *(u8*)data & 0x1F;
+    u8 val = (*(u8*)data) & 0x1F;   // 0–31
 
-    u32 sr = blockA->sinnohRibbons;
-    // clear high 8 bits
-    sr &= 0x00FFFFFF;
-    // set teraType in bits 24–28 (or just whole byte 24–31 if you don’t care)
-    sr |= ((u32)val) << 24;
+    u16 u = blockB->Unused;
+    u &= ~0x001F;                   // clear bits 0–4
+    u |= val;                       // set tera type
+    blockB->Unused = u;
 
-    blockA->sinnohRibbons = sr;
     ret = TRUE;
     break;
 }
 
 case MON_DATA_TERA_ACTIVE:
 {
-    u8 val = *(u8*)data ? 1 : 0;
+    u8 val = (*(u8*)data) ? 1 : 0;
 
-    u32 sr = blockA->sinnohRibbons;
-    // use one bit in the same high byte, e.g. bit 5
+    u16 u = blockB->Unused;
     if (val)
-        sr |= (1u << 29);
+        u |= (1u << 5);             // bit 5 = active
     else
-        sr &= ~(1u << 29);
+        u &= ~(1u << 5);
+    blockB->Unused = u;
 
-    blockA->sinnohRibbons = sr;
     ret = TRUE;
     break;
 }
+
 
     /*
     case MON_DATA_TERA_TYPE:
@@ -718,35 +716,19 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
         *retBool = TRUE;
         break;
     case MON_DATA_TERA_TYPE:
-{
-    u8 val = *(u8*)data & 0x1F;
+    {
+        u16 u = blockB->Unused;
+        *retBool = TRUE;
+        return u & 0x1F;                // bits 0–4
+    }
 
-    u32 sr = blockA->sinnohRibbons;
-    // clear high 8 bits
-    sr &= 0x00FFFFFF;
-    // set teraType in bits 24–28 (or just whole byte 24–31 if you don’t care)
-    sr |= ((u32)val) << 24;
+    case MON_DATA_TERA_ACTIVE:
+    {
+        u16 u = blockB->Unused;
+        *retBool = TRUE;
+        return (u >> 5) & 1;            // bit 5
+    }
 
-    blockA->sinnohRibbons = sr;
-    ret = TRUE;
-    break;
-}
-
-case MON_DATA_TERA_ACTIVE:
-{
-    u8 val = *(u8*)data ? 1 : 0;
-
-    u32 sr = blockA->sinnohRibbons;
-    // use one bit in the same high byte, e.g. bit 5
-    if (val)
-        sr |= (1u << 29);
-    else
-        sr &= ~(1u << 29);
-
-    blockA->sinnohRibbons = sr;
-    ret = TRUE;
-    break;
-}
 
     /*
     case MON_DATA_TERA_TYPE:
