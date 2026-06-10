@@ -604,33 +604,34 @@ BOOL SetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void 
         ret = TRUE;
         break;
     }
-case MON_DATA_TERA_TYPE:
-{
-    u8 val = (*(u8*)data) & 0x1F;   // 0–31
+    case MON_DATA_TERA_TYPE:
+    {
+        u8 val = (*(u8*)data) & 0x1F;   // 0–31
 
-    u16 u = blockB->Unused;
-    u &= ~0x001F;                   // clear bits 0–4
-    u |= val;                       // set tera type
-    blockB->Unused = u;
+        u16 u = blockB->Unused;
+        u &= ~(0x1F << 8);              // clear bits 8–12
+        u |= ((u16)val) << 8;           // set tera type in bits 8–12
+        blockB->Unused = u;
 
-    ret = TRUE;
-    break;
-}
+        ret = TRUE;
+        break;
+    }
 
-case MON_DATA_TERA_ACTIVE:
-{
-    u8 val = (*(u8*)data) ? 1 : 0;
+    case MON_DATA_TERA_ACTIVE:
+    {
+        u8 val = (*(u8*)data) ? 1 : 0;
 
-    u16 u = blockB->Unused;
-    if (val)
-        u |= (1u << 5);             // bit 5 = active
-    else
-        u &= ~(1u << 5);
-    blockB->Unused = u;
+        u16 u = blockB->Unused;
+        if (val)
+            u |= (1u << 13);            // bit 13 = active
+        else
+            u &= ~(1u << 13);
+        blockB->Unused = u;
 
-    ret = TRUE;
-    break;
-}
+        ret = TRUE;
+        break;
+    }
+
 
 
     /*
@@ -719,15 +720,16 @@ u32 GetBoxMonData_EditedCases(struct BoxMonSubstructs *blocks, u32 field, void *
     {
         u16 u = blockB->Unused;
         *retBool = TRUE;
-        return u & 0x1F;                // bits 0–4
+        return (u >> 8) & 0x1F;         // bits 8–12
     }
 
     case MON_DATA_TERA_ACTIVE:
     {
         u16 u = blockB->Unused;
         *retBool = TRUE;
-        return (u >> 5) & 1;            // bit 5
+        return (u >> 13) & 1;           // bit 13
     }
+
 
 
     /*
