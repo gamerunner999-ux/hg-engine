@@ -261,12 +261,13 @@ typedef struct {
     /* 0x1E */ u16 Platinum_MetLocation;
 } PokemonDataBlockB;
 
-typedef struct __attribute__((packed)) {
+typedef struct {
     /* 0x00 */ u16 nickname[11];   // 22 bytes
-    /* 0x16 */ u8 unused;          // padding / reserved
-    /* 0x17 */ u8 originGame;
-               u32 sinnohRibbons2;
-} PokemonDataBlockC;              // size 0x20
+    /* 0x16 */ u8 unused;          // 1
+    /* 0x17 */ u8 originGame;      // 1
+    /* 0x18 */ u32 sinnohRibbons2; // 4
+    /* 0x1C */ u8 padding[4];      // <-- force struct to 32 bytes
+} PokemonDataBlockC;
 
 typedef struct {
     /* 0x00 */ u16 otTrainerName[8];
