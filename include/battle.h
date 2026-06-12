@@ -1824,14 +1824,14 @@ struct PACKED newBattleStruct
     CATS_ACT_PTR WeatherOAM;
     SysTask *weatherUpdateTask;
 
-    u8 SideTera[4];
+ /*   u8 SideTera[4];
     u8 needTera[4];
     u8 playerWantTera;
     u8 PlayerTeraed;
     u8 TeraIconLight;
     u8 CanTera;
     CATS_ACT_PTR TeraOAM;
-    CATS_ACT_PTR TeraButton;
+    CATS_ACT_PTR TeraButton; */
 #ifdef RESTORE_ITEMS_AT_BATTLE_END
     u16 itemsToRestore[6]; // items that each mon was holding at the beginning of the battle
 #endif // RESTORE_ITEMS_AT_BATTLE_END
