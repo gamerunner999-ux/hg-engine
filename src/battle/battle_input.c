@@ -1137,7 +1137,7 @@ BOOL CheckTeraButton(struct BI_PARAM *bip, int tp_ret)
     OAM_LoadResourceCharArc(csp, crp, ARC_BATTLE_GFX, iconindex, 0, NNS_G2D_VRAM_TYPE_2DSUB, TERA_BUTTON_SPRITE_TAG);
     OAM_LoadResourcePlttWorkArc(pfd, FADE_SUB_OBJ, csp, crp, ARC_BATTLE_GFX, palindex, 0, 1, NNS_G2D_VRAM_TYPE_2DSUB, TERA_BUTTON_PAL_TAG);
     
-    OAM_ObjectUpdate(newBS.TeraButton->act);
+    //OAM_ObjectUpdate(newBS.TeraButton->act);
     Snd_SePlay(1501); // Play menu click sound
 
     // Force menu interface alignment
