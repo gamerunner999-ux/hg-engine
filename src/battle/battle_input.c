@@ -369,7 +369,7 @@ void LoadMegaIcon(struct BI_PARAM *bip)
         OAM_ObjectUpdate(newBS.MegaOAM->act);
     }
 // 3. Render Terastallization Icon if eligible
-    /* else if (!newBS.TeraOAM && newBS.CanTera)
+    /*else if (!newBS.TeraOAM && newBS.CanTera)
     {
         csp = BattleWorkCATS_SYS_PTRGet(bip->bw);
         crp = BattleWorkCATS_RES_PTRGet(bip->bw);
@@ -1033,7 +1033,7 @@ void LONG_CALL BattleBackgroundCallback(void *unkPtr, int unk2, int unk3)
 
 /**
  * @brief Checks if the active Pokémon is eligible to Terastallize this turn.
- 
+ **/
 BOOL CheckCanDrawTeraButton(struct BI_PARAM *bip)
 {
     void *pp;
@@ -1051,7 +1051,7 @@ BOOL CheckCanDrawTeraButton(struct BI_PARAM *bip)
 #endif
 
     // Double battle safety: if player already selected Tera for the first slot
-    if (bip->client_no && newBS.playerWantTera) 
+    /*if (bip->client_no && newBS.playerWantTera) 
     {
         return FALSE;
     }
@@ -1060,7 +1060,7 @@ BOOL CheckCanDrawTeraButton(struct BI_PARAM *bip)
     if (newBS.PlayerTeraed)
     {
         return FALSE;
-    }
+    }*/
 
     // Hardware/Emulator safety check
     if (IS_NOT_VALID_EWRAM_POINTER(&bip->bw->opponentData[bip->client_no])) 
@@ -1091,11 +1091,11 @@ BOOL CheckCanDrawTeraButton(struct BI_PARAM *bip)
     }
 
     return TRUE;
-}*/
+}
 
 /**
  * @brief Processes the touch screen input when the player interacts with the Tera button.
- 
+ **/
 BOOL CheckTeraButton(struct BI_PARAM *bip, int tp_ret)
 {
     void *csp;
@@ -1108,11 +1108,11 @@ BOOL CheckTeraButton(struct BI_PARAM *bip, int tp_ret)
         return 0;
     if (newBS.ChangeBgFlag) 
         return 0;
-    if (!newBS.CanTera) 
+    /*if (!newBS.CanTera) 
         return 0;
     if (newBS.PlayerTeraed) 
         return 0;
-
+    */
     csp = BattleWorkCATS_SYS_PTRGet(bip->bw);
     crp = BattleWorkCATS_RES_PTRGet(bip->bw);
     pfd = BattleWorkPfdGet(bip->bw);
@@ -1121,7 +1121,7 @@ BOOL CheckTeraButton(struct BI_PARAM *bip, int tp_ret)
     OAM_FreeResourcePltt(crp, TERA_BUTTON_PAL_TAG);
     OAM_FreeResourceChar(crp, TERA_BUTTON_SPRITE_TAG);
 
-    // Toggle selected state
+    /* Toggle selected state
     if (newBS.TeraIconLight)
     {
         iconindex = TERA_ICON_BLANK_GFX;
@@ -1131,7 +1131,7 @@ BOOL CheckTeraButton(struct BI_PARAM *bip, int tp_ret)
     else
     {
         newBS.TeraIconLight = 1;
-    }
+    }*/
 
     // Load the updated asset configuration into memory
     OAM_LoadResourceCharArc(csp, crp, ARC_BATTLE_GFX, iconindex, 0, NNS_G2D_VRAM_TYPE_2DSUB, TERA_BUTTON_SPRITE_TAG);
@@ -1147,9 +1147,9 @@ BOOL CheckTeraButton(struct BI_PARAM *bip, int tp_ret)
     bip->tp_ret = RECT_HIT_NONE;
     bip->obj_del = FALSE;
     newBS.ChangeBgFlag = 1;
-    int client_no = BattleWorkClientNoGet(bip->bw, 0);
-    newBS.needTera[client_no] = TERA_NEED;
-    newBS.playerWantTera = TRUE;
+    //int client_no = BattleWorkClientNoGet(bip->bw, 0);
+    //newBS.needTera[client_no] = TERA_NEED;
+    //newBS.playerWantTera = TRUE;
 
     return 1;
-} */
+} 
