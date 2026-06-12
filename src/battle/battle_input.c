@@ -1095,7 +1095,7 @@ BOOL CheckCanDrawTeraButton(struct BI_PARAM *bip)
 
 /**
  * @brief Processes the touch screen input when the player interacts with the Tera button.
- */
+ 
 BOOL CheckTeraButton(struct BI_PARAM *bip, int tp_ret)
 {
     void *csp;
@@ -1152,4 +1152,4 @@ BOOL CheckTeraButton(struct BI_PARAM *bip, int tp_ret)
     newBS.playerWantTera = TRUE;
 
     return 1;
-}
+} */
