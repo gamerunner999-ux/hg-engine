@@ -332,7 +332,7 @@ void LoadMegaIcon(struct BI_PARAM *bip)
 
     // 1. Calculate eligibility for both mechanics
     newBS.CanMega = CheckCanDrawMegaButton(bip);
-    newBS.CanTera = CheckCanDrawTeraButton(bip);
+    //newBS.CanTera = CheckCanDrawTeraButton(bip);
 
     // 2. Render Mega Evolution / Primal Icons if eligible
     if (!newBS.MegaOAM && CheckIsMega(bip))
@@ -369,7 +369,7 @@ void LoadMegaIcon(struct BI_PARAM *bip)
         OAM_ObjectUpdate(newBS.MegaOAM->act);
     }
 // 3. Render Terastallization Icon if eligible
-    else if (!newBS.TeraOAM && newBS.CanTera)
+    /* else if (!newBS.TeraOAM && newBS.CanTera)
     {
         csp = BattleWorkCATS_SYS_PTRGet(bip->bw);
         crp = BattleWorkCATS_RES_PTRGet(bip->bw);
@@ -405,7 +405,7 @@ void LoadMegaIcon(struct BI_PARAM *bip)
         // 4. Register and draw
         newBS.TeraOAM = OAM_ObjectAdd_S(csp, crp, &teraTemplate);
         OAM_ObjectUpdate(newBS.TeraOAM->act);
-    }
+    }*/
 
     // Weather icon handling remains exactly the same below...
     if (bip->bw->sp->field_condition & WEATHER_ANY_ICONS)
@@ -1033,7 +1033,7 @@ void LONG_CALL BattleBackgroundCallback(void *unkPtr, int unk2, int unk3)
 
 /**
  * @brief Checks if the active Pokémon is eligible to Terastallize this turn.
- */
+ 
 BOOL CheckCanDrawTeraButton(struct BI_PARAM *bip)
 {
     void *pp;
@@ -1091,7 +1091,7 @@ BOOL CheckCanDrawTeraButton(struct BI_PARAM *bip)
     }
 
     return TRUE;
-}
+}*/
 
 /**
  * @brief Processes the touch screen input when the player interacts with the Tera button.
