@@ -414,7 +414,7 @@ static BOOL MegaEvolutionOrUltraBurst(struct BattleSystem *bsys, struct BattleSt
     for (i = 0; i < client_set_max; i++) {
         client_no = ctx->turnOrder[i];
         // --- Terastallization Activation ---
-        if (newBS.needTera[client_no] == TERA_NEED && ctx->battlemon[client_no].hp)
+        /*if (newBS.needTera[client_no] == TERA_NEED && ctx->battlemon[client_no].hp)
         {
             // Apply Tera transformation
             //TerastallizeBattler(ctx, client_no);
@@ -432,7 +432,7 @@ static BOOL MegaEvolutionOrUltraBurst(struct BattleSystem *bsys, struct BattleSt
             ctx->next_server_seq_no = ctx->server_seq_no;
             ctx->server_seq_no = CONTROLLER_COMMAND_RUN_SCRIPT;
             return TRUE;
-        }
+        }*/
 
 
         if (newBS.needMega[client_no] == MEGA_NEED && ctx->battlemon[client_no].hp) {
