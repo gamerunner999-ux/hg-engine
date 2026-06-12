@@ -417,7 +417,7 @@ static BOOL MegaEvolutionOrUltraBurst(struct BattleSystem *bsys, struct BattleSt
         if (newBS.needTera[client_no] == TERA_NEED && ctx->battlemon[client_no].hp)
         {
             // Apply Tera transformation
-            TerastallizeBattler(ctx, client_no);
+            //TerastallizeBattler(ctx, client_no);
 
             // Mark Tera as processed
             newBS.needTera[client_no] = TERA_CHECK_APPEAR;

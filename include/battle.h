@@ -1824,7 +1824,6 @@ struct PACKED newBattleStruct
     CATS_ACT_PTR WeatherOAM;
     SysTask *weatherUpdateTask;
 
-    // --- Terastallization Tracking (APPEND ONLY) ---
     u8 SideTera[4];
     u8 needTera[4];
     u8 playerWantTera;
